@@ -6,6 +6,9 @@ Supporting artifacts:
 
 - `FAILURE_CODES.md`: deterministic reason-code taxonomy and precedence
 - `validation_report.schema.json`: canonical report schema (`eal.validation.report.v1`)
+- `receipt.schema.json`: minimal deterministic receipt schema (`eal.receipt.v1`)
+- `compat_report.schema.json`: compatibility report schema (`eal.compat.report.v1`)
+- `compatibility_rules.md`: deterministic Compat calculus and reason precedence
 - `CANONICALIZATION.md`: canonical JSON and hashing rules
 - `verify_conformance.py`: executable verifier (schema + precedence + hash)
 
@@ -14,6 +17,12 @@ Each fixture file includes:
 - `inputs`: contract/receipt artifacts required for evaluation
 - `expected_report`: deterministic machine-readable output
 - `expected_report_sha256`: SHA-256 of canonicalized `expected_report`
+
+Fixture sets:
+
+- `fixtures/`: validation fixtures (`T1-T5`)
+- `fixtures_receipt/`: receipt determinism fixtures (`R1-R4`)
+- `fixtures_compat/`: compatibility calculus fixtures (`C1-C7`)
 
 Canonicalization rule:
 

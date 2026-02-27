@@ -7,6 +7,8 @@ This repository is intentionally scoped to the assurance layer:
 - deterministic validation outputs
 - reason-code taxonomy with precedence
 - canonical report schema
+- minimal receipt schema
+- deterministic compatibility calculus
 - golden conformance fixtures
 - hash-stable verification harness
 

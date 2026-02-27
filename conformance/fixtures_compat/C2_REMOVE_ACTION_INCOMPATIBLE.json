@@ -1,0 +1,71 @@
+{
+  "test_id": "C2_REMOVE_ACTION_INCOMPATIBLE",
+  "description": "Remove action",
+  "inputs": {
+    "contract_a": {
+      "contract_id": "contract-a-v1",
+      "contract_version": "1.0.0",
+      "contract_sha256": "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa",
+      "action_space": [
+        "ACT_READ_STATUS",
+        "ACT_SEND_NOTIFICATION"
+      ],
+      "constraints": {
+        "budget_max": 100,
+        "max_steps": 5
+      },
+      "risk_policy": {
+        "ACT_READ_STATUS": 1,
+        "ACT_SEND_NOTIFICATION": 2
+      },
+      "semantics_changed": false
+    },
+    "contract_b": {
+      "contract_id": "contract-b-v2",
+      "contract_version": "2.0.0",
+      "contract_sha256": "cccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccc",
+      "action_space": [
+        "ACT_READ_STATUS"
+      ],
+      "constraints": {
+        "budget_max": 100,
+        "max_steps": 5
+      },
+      "risk_policy": {
+        "ACT_READ_STATUS": 1
+      },
+      "semantics_changed": false
+    }
+  },
+  "expected_compat_report": {
+    "schema_version": "eal.compat.report.v1",
+    "classification": "INCOMPATIBLE",
+    "primary_reason_code": "COMPAT_ACTION_REMOVED",
+    "reason_codes": [
+      "COMPAT_ACTION_REMOVED"
+    ],
+    "contract_a_ref": {
+      "contract_id": "contract-a-v1",
+      "contract_hash": "sha256:aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa"
+    },
+    "contract_b_ref": {
+      "contract_id": "contract-b-v2",
+      "contract_hash": "sha256:cccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccc"
+    },
+    "diff_summary": {
+      "actions_added": [],
+      "actions_removed": [
+        "ACT_SEND_NOTIFICATION"
+      ],
+      "constraints_added": [],
+      "constraints_removed": [],
+      "constraints_tightened": [],
+      "constraints_loosened": [],
+      "risk_increased": [],
+      "risk_decreased": [],
+      "semantics_changed": false
+    },
+    "evaluator_profile": "eal-fixture-profile-v1"
+  },
+  "expected_compat_report_sha256": "7698017cc4c83d8f0953fec4bdf6312b74493ee348f2d01e3c45dcc1c0981fbf"
+}

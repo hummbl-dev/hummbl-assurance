@@ -1,0 +1,68 @@
+{
+  "test_id": "R2_RECEIPT_MISSING_EVIDENCE",
+  "description": "Missing evidence should be INDETERMINATE",
+  "inputs": {
+    "contract": {
+      "contract_id": "contract-e1-v1",
+      "contract_version": "1.0.0",
+      "contract_sha256": "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa",
+      "action_space": [
+        "ACT_READ_STATUS",
+        "ACT_SEND_NOTIFICATION"
+      ]
+    },
+    "receipt": {
+      "receipt_version": "1.0.0",
+      "execution_id": "exec-r2",
+      "contract_ref": {
+        "contract_id": "contract-e1-v1",
+        "contract_version": "1.0.0",
+        "contract_sha256": "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa"
+      },
+      "epoch_ref": {
+        "epoch_id": "epoch-1",
+        "epoch_number": 1
+      },
+      "actions": [
+        {
+          "index": 0,
+          "action_id": "ACT_READ_STATUS",
+          "params_c14n_sha256": "bbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb",
+          "params_inline": {},
+          "boundary_assertion": {
+            "decision": "ALLOW",
+            "basis": "POLICY_MATCH"
+          }
+        }
+      ],
+      "evidence": [],
+      "integrity": {
+        "receipt_c14n_sha256": "eeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeee"
+      },
+      "signature": {
+        "alg": "ed25519",
+        "kid": "k1",
+        "sig": "VALIDSIG_R2"
+      }
+    }
+  },
+  "expected_report": {
+    "schema_version": "eal.validation.report.v1",
+    "classification": "INDETERMINATE",
+    "primary_reason_code": "E_EVIDENCE_MISSING",
+    "reason_codes": [
+      "E_EVIDENCE_MISSING"
+    ],
+    "contract_ref": {
+      "contract_id": "contract-e1-v1",
+      "contract_hash": "sha256:aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa"
+    },
+    "receipt_ref": {
+      "receipt_id": "exec-r2",
+      "receipt_hash": "sha256:eeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeee"
+    },
+    "evaluated_epoch": 1,
+    "validator_profile": "eal-fixture-profile-v1"
+  },
+  "expected_report_sha256": "461f67c9c77e85fb7368e94f4a8c458e1a2ddc387670e33e7b868e96ab12aafe"
+}

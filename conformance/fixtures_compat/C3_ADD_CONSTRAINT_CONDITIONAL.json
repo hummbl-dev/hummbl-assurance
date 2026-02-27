@@ -1,0 +1,74 @@
+{
+  "test_id": "C3_ADD_CONSTRAINT_CONDITIONAL",
+  "description": "Add constraint",
+  "inputs": {
+    "contract_a": {
+      "contract_id": "contract-a-v1",
+      "contract_version": "1.0.0",
+      "contract_sha256": "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa",
+      "action_space": [
+        "ACT_READ_STATUS",
+        "ACT_SEND_NOTIFICATION"
+      ],
+      "constraints": {
+        "budget_max": 100,
+        "max_steps": 5
+      },
+      "risk_policy": {
+        "ACT_READ_STATUS": 1,
+        "ACT_SEND_NOTIFICATION": 2
+      },
+      "semantics_changed": false
+    },
+    "contract_b": {
+      "contract_id": "contract-b-v2",
+      "contract_version": "2.0.0",
+      "contract_sha256": "dddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddd",
+      "action_space": [
+        "ACT_READ_STATUS",
+        "ACT_SEND_NOTIFICATION"
+      ],
+      "constraints": {
+        "budget_max": 100,
+        "max_steps": 5,
+        "max_tools": 3
+      },
+      "risk_policy": {
+        "ACT_READ_STATUS": 1,
+        "ACT_SEND_NOTIFICATION": 2
+      },
+      "semantics_changed": false
+    }
+  },
+  "expected_compat_report": {
+    "schema_version": "eal.compat.report.v1",
+    "classification": "CONDITIONAL",
+    "primary_reason_code": "COMPAT_CONSTRAINT_ADDED",
+    "reason_codes": [
+      "COMPAT_CONSTRAINT_ADDED"
+    ],
+    "contract_a_ref": {
+      "contract_id": "contract-a-v1",
+      "contract_hash": "sha256:aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa"
+    },
+    "contract_b_ref": {
+      "contract_id": "contract-b-v2",
+      "contract_hash": "sha256:dddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddd"
+    },
+    "diff_summary": {
+      "actions_added": [],
+      "actions_removed": [],
+      "constraints_added": [
+        "max_tools"
+      ],
+      "constraints_removed": [],
+      "constraints_tightened": [],
+      "constraints_loosened": [],
+      "risk_increased": [],
+      "risk_decreased": [],
+      "semantics_changed": false
+    },
+    "evaluator_profile": "eal-fixture-profile-v1"
+  },
+  "expected_compat_report_sha256": "522edc3b05423988763a98ae8b8e87c7fc1d3cc8fc5d424485b6c689f44b62ee"
+}

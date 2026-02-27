@@ -1,0 +1,74 @@
+{
+  "test_id": "R1_RECEIPT_OK",
+  "description": "Valid minimal receipt",
+  "inputs": {
+    "contract": {
+      "contract_id": "contract-e1-v1",
+      "contract_version": "1.0.0",
+      "contract_sha256": "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa",
+      "action_space": [
+        "ACT_READ_STATUS",
+        "ACT_SEND_NOTIFICATION"
+      ]
+    },
+    "receipt": {
+      "receipt_version": "1.0.0",
+      "execution_id": "exec-r1",
+      "contract_ref": {
+        "contract_id": "contract-e1-v1",
+        "contract_version": "1.0.0",
+        "contract_sha256": "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa"
+      },
+      "epoch_ref": {
+        "epoch_id": "epoch-1",
+        "epoch_number": 1
+      },
+      "actions": [
+        {
+          "index": 0,
+          "action_id": "ACT_READ_STATUS",
+          "params_c14n_sha256": "bbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb",
+          "params_inline": {},
+          "boundary_assertion": {
+            "decision": "ALLOW",
+            "basis": "POLICY_MATCH"
+          }
+        }
+      ],
+      "evidence": [
+        {
+          "evidence_id": "ev-r1-1",
+          "kind": "PLAN_HASH",
+          "sha256": "cccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccc"
+        }
+      ],
+      "integrity": {
+        "receipt_c14n_sha256": "dddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddd"
+      },
+      "signature": {
+        "alg": "ed25519",
+        "kid": "k1",
+        "sig": "VALIDSIG_R1"
+      }
+    }
+  },
+  "expected_report": {
+    "schema_version": "eal.validation.report.v1",
+    "classification": "VALID",
+    "primary_reason_code": "E_OK_VALID",
+    "reason_codes": [
+      "E_OK_VALID"
+    ],
+    "contract_ref": {
+      "contract_id": "contract-e1-v1",
+      "contract_hash": "sha256:aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa"
+    },
+    "receipt_ref": {
+      "receipt_id": "exec-r1",
+      "receipt_hash": "sha256:dddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddd"
+    },
+    "evaluated_epoch": 1,
+    "validator_profile": "eal-fixture-profile-v1"
+  },
+  "expected_report_sha256": "074cb177a3bb92179ab78194cb57e3fc4253b796f64abccb24f2943e9fedfc1f"
+}
