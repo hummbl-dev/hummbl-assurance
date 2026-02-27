@@ -149,6 +149,7 @@ Reference implementation fixtures for this draft live in:
 Additional deterministic fixture sets for next-phase lock-in:
 
 - `conformance/fixtures_receipt/` (`R1-R4`) for receipt schema and evidence sufficiency checks
+- `conformance/fixtures_temporal/` (`T6`) for explicit `INVALIDATED` epoch bridge behavior
 - `conformance/fixtures_compat/` (`C1-C7`) for `Compat(C_e, C_e+1)` classification checks
 
 ## 12. IP-Safe Publishability Contract

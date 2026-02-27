@@ -10,6 +10,7 @@ Supporting artifacts:
 - `compat_report.schema.json`: compatibility report schema (`eal.compat.report.v1`)
 - `compatibility_rules.md`: deterministic Compat calculus and reason precedence
 - `CANONICALIZATION.md`: canonical JSON and hashing rules
+- `ip_boundary.md`: allowed vs non-publishable artifact matrix
 - `verify_conformance.py`: executable verifier (schema + precedence + hash)
 
 Each fixture file includes:
@@ -22,6 +23,7 @@ Fixture sets:
 
 - `fixtures/`: validation fixtures (`T1-T5`)
 - `fixtures_receipt/`: receipt determinism fixtures (`R1-R4`)
+- `fixtures_temporal/`: epoch bridge fixture (`T6`)
 - `fixtures_compat/`: compatibility calculus fixtures (`C1-C7`)
 
 Canonicalization rule:

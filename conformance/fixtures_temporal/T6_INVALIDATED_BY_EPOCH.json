@@ -1,0 +1,102 @@
+{
+  "test_id": "T6_INVALIDATED_BY_EPOCH",
+  "description": "Receipt valid in origin epoch becomes INVALIDATED under next epoch",
+  "inputs": {
+    "contract_a": {
+      "contract_id": "contract-temporal-e1",
+      "contract_version": "1.0.0",
+      "contract_sha256": "3333333333333333333333333333333333333333333333333333333333333333",
+      "epoch_number": 1,
+      "action_space": [
+        "ACT_SEND_NOTIFICATION",
+        "ACT_READ_STATUS"
+      ],
+      "constraints": {
+        "budget_max": 100
+      },
+      "risk_policy": {
+        "ACT_SEND_NOTIFICATION": 2,
+        "ACT_READ_STATUS": 1
+      },
+      "semantics_changed": false
+    },
+    "contract_b": {
+      "contract_id": "contract-temporal-e2",
+      "contract_version": "2.0.0",
+      "contract_sha256": "4444444444444444444444444444444444444444444444444444444444444444",
+      "epoch_number": 2,
+      "action_space": [
+        "ACT_READ_STATUS"
+      ],
+      "constraints": {
+        "budget_max": 100
+      },
+      "risk_policy": {
+        "ACT_READ_STATUS": 1
+      },
+      "semantics_changed": false
+    },
+    "receipt": {
+      "receipt_version": "1.0.0",
+      "execution_id": "exec-t6",
+      "contract_ref": {
+        "contract_id": "contract-temporal-e1",
+        "contract_version": "1.0.0",
+        "contract_sha256": "3333333333333333333333333333333333333333333333333333333333333333"
+      },
+      "epoch_ref": {
+        "epoch_id": "epoch-1",
+        "epoch_number": 1
+      },
+      "actions": [
+        {
+          "index": 0,
+          "action_id": "ACT_SEND_NOTIFICATION",
+          "params_c14n_sha256": "5555555555555555555555555555555555555555555555555555555555555555",
+          "params_inline": {
+            "channel": "ops"
+          },
+          "boundary_assertion": {
+            "decision": "ALLOW",
+            "basis": "POLICY_MATCH"
+          }
+        }
+      ],
+      "evidence": [
+        {
+          "evidence_id": "ev-t6-1",
+          "kind": "PLAN_HASH",
+          "sha256": "6666666666666666666666666666666666666666666666666666666666666666"
+        }
+      ],
+      "integrity": {
+        "receipt_c14n_sha256": "7777777777777777777777777777777777777777777777777777777777777777"
+      },
+      "signature": {
+        "alg": "ed25519",
+        "kid": "k1",
+        "sig": "VALIDSIG_T6"
+      }
+    }
+  },
+  "expected_report": {
+    "schema_version": "eal.validation.report.v1",
+    "classification": "INVALIDATED",
+    "primary_reason_code": "E_EPOCH_INVALIDATED",
+    "reason_codes": [
+      "E_EPOCH_INVALIDATED"
+    ],
+    "contract_ref": {
+      "contract_id": "contract-temporal-e2",
+      "contract_hash": "sha256:4444444444444444444444444444444444444444444444444444444444444444"
+    },
+    "receipt_ref": {
+      "receipt_id": "exec-t6",
+      "receipt_hash": "sha256:7777777777777777777777777777777777777777777777777777777777777777"
+    },
+    "evaluated_epoch": 2,
+    "origin_epoch": 1,
+    "validator_profile": "eal-fixture-profile-v1"
+  },
+  "expected_report_sha256": "c71dc2a2f6e214cde76ad184e8a854917b4eea0d88afb241079edf8becbd172d"
+}

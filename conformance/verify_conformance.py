@@ -7,6 +7,7 @@ Checks:
 - reason_codes order follows declared precedence
 - expected report hash matches canonical bytes
 - receipt fixtures: receipt schema validity + deterministic evaluator parity
+- temporal fixture: INVALIDATED-by-epoch bridge proof
 - compat fixtures: deterministic classifier parity
 """
 
@@ -233,6 +234,43 @@ def evaluate_compat(inputs: dict[str, Any]) -> dict[str, Any]:
     }
 
 
+def evaluate_temporal(inputs: dict[str, Any]) -> dict[str, Any]:
+    contract_a = inputs["contract_a"]
+    contract_b = inputs["contract_b"]
+    receipt = inputs["receipt"]
+
+    action_ids = [entry["action_id"] for entry in receipt["actions"]]
+    a_actions = set(contract_a["action_space"])
+    b_actions = set(contract_b["action_space"])
+
+    if not all(action_id in a_actions for action_id in action_ids):
+        classification, code = "INVALID", "E_ACTION_OUT_OF_SPACE"
+    elif not all(action_id in b_actions for action_id in action_ids):
+        classification, code = "INVALIDATED", "E_EPOCH_INVALIDATED"
+    else:
+        classification, code = "VALID", "E_OK_VALID"
+
+    report = {
+        "schema_version": "eal.validation.report.v1",
+        "classification": classification,
+        "primary_reason_code": code,
+        "reason_codes": [code],
+        "contract_ref": {
+            "contract_id": contract_b["contract_id"],
+            "contract_hash": f"sha256:{contract_b['contract_sha256']}",
+        },
+        "receipt_ref": {
+            "receipt_id": receipt["execution_id"],
+            "receipt_hash": f"sha256:{receipt['integrity']['receipt_c14n_sha256']}",
+        },
+        "evaluated_epoch": contract_b["epoch_number"],
+        "validator_profile": EAL_PROFILE,
+    }
+    if classification == "INVALIDATED":
+        report["origin_epoch"] = contract_a["epoch_number"]
+    return report
+
+
 def verify_validation_fixtures(base: Path, validation_schema: dict[str, Any]) -> None:
     fixture_paths = sorted(Path(p) for p in glob.glob(str(base / "fixtures" / "*.json")))
     if not fixture_paths:
@@ -284,6 +322,49 @@ def verify_receipt_fixtures(
         print(f"PASS {fixture_path.name}")
 
 
+def verify_temporal_fixtures(
+    base: Path,
+    validation_schema: dict[str, Any],
+    receipt_schema: dict[str, Any],
+) -> None:
+    fixture_paths = sorted(Path(p) for p in glob.glob(str(base / "fixtures_temporal" / "*.json")))
+    if not fixture_paths:
+        raise ValueError("no temporal fixtures found")
+
+    for fixture_path in fixture_paths:
+        with fixture_path.open("r", encoding="utf-8") as fh:
+            fixture = json.load(fh)
+
+        validate(instance=fixture["inputs"]["receipt"], schema=receipt_schema)
+
+        compat_report = evaluate_compat(
+            {
+                "contract_a": fixture["inputs"]["contract_a"],
+                "contract_b": fixture["inputs"]["contract_b"],
+            }
+        )
+        if compat_report["classification"] == "BACKWARD_COMPATIBLE":
+            raise ValueError(
+                f"{fixture_path.name}: temporal invalidation fixture requires non-backward compatibility"
+            )
+
+        expected_report = fixture["expected_report"]
+        derived_report = evaluate_temporal(fixture["inputs"])
+        if derived_report != expected_report:
+            raise ValueError(
+                f"{fixture_path.name}: derived temporal report does not match expected_report"
+            )
+
+        verify_report(
+            expected_report,
+            fixture["expected_report_sha256"],
+            validation_schema,
+            EAL_PRECEDENCE_INDEX,
+            fixture_path.name,
+        )
+        print(f"PASS {fixture_path.name}")
+
+
 def verify_compat_fixtures(base: Path, compat_schema: dict[str, Any]) -> None:
     fixture_paths = sorted(Path(p) for p in glob.glob(str(base / "fixtures_compat" / "*.json")))
     if not fixture_paths:
@@ -322,6 +403,7 @@ def main() -> int:
 
     verify_validation_fixtures(base, validation_schema)
     verify_receipt_fixtures(base, validation_schema, receipt_schema)
+    verify_temporal_fixtures(base, validation_schema, receipt_schema)
     verify_compat_fixtures(base, compat_schema)
     return 0
 
