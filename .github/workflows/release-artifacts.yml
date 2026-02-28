@@ -97,8 +97,8 @@ jobs:
             fi
 
             status="$(jq -r '.[0].status' <<<"$run_json")"
-            conclusion="$(jq -r '.[0].conclusion // \"\"' <<<"$run_json")"
-            run_url="$(jq -r '.[0].url // \"\"' <<<"$run_json")"
+            conclusion="$(jq -r '.[0].conclusion // ""' <<<"$run_json")"
+            run_url="$(jq -r '.[0].url // ""' <<<"$run_json")"
 
             if [[ "$status" != "completed" ]]; then
               if (( SECONDS >= deadline )); then
