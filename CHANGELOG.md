@@ -19,6 +19,10 @@ All notable changes to this repository are documented here.
   - `conformance/verify_vendor_feature_gates.py`
   - `make feature-gate`
   - `make feature-gate-live`
+- Vendor surface evidence tooling:
+  - `conformance/collect_vendor_surface_evidence.py`
+  - `make vendor-scan`
+  - `make vendor-scan-sync`
 
 ### Changed
 

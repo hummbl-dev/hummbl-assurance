@@ -13,9 +13,10 @@ Use semantic version tags: `vMAJOR.MINOR.PATCH`.
 1. `make verify`
 2. `make verify-repeat`
 3. `make feature-gate`
-4. `make protection-audit`
-5. Confirm `CHANGELOG.md` includes release notes
-6. Create annotated tag
+4. `make vendor-scan` (recommended evidence refresh)
+5. `make protection-audit`
+6. Confirm `CHANGELOG.md` includes release notes
+7. Create annotated tag
 
 ```bash
 make cut-release VERSION=vX.Y.Z
@@ -62,6 +63,12 @@ Optional operator-only live environment parity check:
 
 ```bash
 make feature-gate-live
+```
+
+Optional operator sync to hydrate gate metadata from local vendor probes:
+
+```bash
+make vendor-scan-sync
 ```
 
 `feature-gate` validates:

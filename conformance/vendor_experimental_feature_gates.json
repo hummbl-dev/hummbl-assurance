@@ -1,6 +1,6 @@
 {
   "schema_version": "eal.vendor.experimental.feature.gates.v1",
-  "generated_at": "2026-02-28T16:00:00+00:00",
+  "generated_at": "2026-02-28T16:02:20+00:00",
   "required_vendor_surfaces": [
     {
       "vendor_id": "openai",
@@ -163,9 +163,11 @@
       "surface_id": "claude_code_cli",
       "status": "pending_evidence",
       "evaluated_at": "2026-02-28T16:00:00+00:00",
-      "audited_version": "",
+      "audited_version": "2.1.63 (Claude Code)",
       "profile": "exp_pilot",
-      "feature_inventory": [],
+      "feature_inventory": [
+        "betas"
+      ],
       "default_policy": {
         "description": "Pending vendor-specific experimental inventory and baseline matrix.",
         "experimental_flags": {}
@@ -179,9 +181,11 @@
       "surface_id": "gemini_cli",
       "status": "pending_evidence",
       "evaluated_at": "2026-02-28T16:00:00+00:00",
-      "audited_version": "",
+      "audited_version": "0.29.7",
       "profile": "exp_pilot",
-      "feature_inventory": [],
+      "feature_inventory": [
+        "experimental-acp"
+      ],
       "default_policy": {
         "description": "Pending vendor-specific experimental inventory and baseline matrix.",
         "experimental_flags": {}
@@ -211,7 +215,7 @@
       "surface_id": "ollama_local",
       "status": "pending_evidence",
       "evaluated_at": "2026-02-28T16:00:00+00:00",
-      "audited_version": "",
+      "audited_version": "ollama-cli 0.15.4 (daemon_unreachable)",
       "profile": "exp_pilot",
       "feature_inventory": [],
       "default_policy": {

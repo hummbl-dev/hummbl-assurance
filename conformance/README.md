@@ -10,6 +10,7 @@ Supporting artifacts:
 - `compat_report.schema.json`: compatibility report schema (`eal.compat.report.v1`)
 - `release_receipt.schema.json`: release governance manifest schema (`eal.release.receipt.v1`)
 - `vendor_experimental_feature_gates.json`: pinned multi-vendor experimental feature promotion decisions
+- `collect_vendor_surface_evidence.py`: vendor surface probe (CLI/API availability, version, candidate experimental inventory)
 - `compatibility_rules.md`: deterministic Compat calculus and reason precedence
 - `CANONICALIZATION.md`: canonical JSON and hashing rules
 - `ip_boundary.md`: allowed vs non-publishable artifact matrix
@@ -62,6 +63,13 @@ Vendor experimental feature gate check:
 
 ```bash
 python3 conformance/verify_vendor_feature_gates.py
+```
+
+Vendor surface evidence probe:
+
+```bash
+python3 conformance/collect_vendor_surface_evidence.py
+python3 conformance/collect_vendor_surface_evidence.py --update-gate
 ```
 
 The vendor gate verifier enforces:

@@ -1,4 +1,4 @@
-.PHONY: verify verify-repeat cli-smoke feature-gate feature-gate-live protection-audit release-check release-receipt cut-release
+.PHONY: verify verify-repeat cli-smoke feature-gate feature-gate-live vendor-scan vendor-scan-sync protection-audit release-check release-receipt cut-release
 
 verify:
 	python3 conformance/verify_conformance.py
@@ -18,6 +18,13 @@ feature-gate:
 
 feature-gate-live:
 	python3 conformance/verify_vendor_feature_gates.py --live-check --require-codex
+
+vendor-scan:
+	python3 conformance/collect_vendor_surface_evidence.py
+
+vendor-scan-sync:
+	python3 conformance/collect_vendor_surface_evidence.py --update-gate
+	python3 conformance/verify_vendor_feature_gates.py
 
 protection-audit:
 	./scripts/audit_branch_protection.sh main
