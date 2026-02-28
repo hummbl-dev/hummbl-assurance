@@ -35,6 +35,85 @@ def _fail(errors: list[str], message: str) -> None:
     errors.append(message)
 
 
+def _parse_required_vendor_surfaces(
+    payload: dict[str, Any],
+    errors: list[str],
+) -> set[tuple[str, str]]:
+    surfaces = payload.get("required_vendor_surfaces")
+    if not isinstance(surfaces, list) or not surfaces:
+        _fail(errors, "required_vendor_surfaces must be non-empty array")
+        return set()
+
+    required: set[tuple[str, str]] = set()
+    for idx, entry in enumerate(surfaces):
+        prefix = f"required_vendor_surfaces[{idx}]"
+        if not isinstance(entry, dict):
+            _fail(errors, f"{prefix} must be object")
+            continue
+
+        vendor_id = str(entry.get("vendor_id", "")).strip()
+        surface_id = str(entry.get("surface_id", "")).strip()
+        if not vendor_id:
+            _fail(errors, f"{prefix}.vendor_id must be non-empty string")
+        if not surface_id:
+            _fail(errors, f"{prefix}.surface_id must be non-empty string")
+
+        if vendor_id and surface_id:
+            key = (vendor_id, surface_id)
+            if key in required:
+                _fail(errors, f"{prefix} duplicates vendor/surface key: {vendor_id}/{surface_id}")
+            required.add(key)
+
+    return required
+
+
+def _normalize_feature_inventory(value: Any, key: str, errors: list[str]) -> list[str]:
+    if not isinstance(value, list):
+        _fail(errors, f"vendor[{key}].feature_inventory must be array")
+        return []
+
+    normalized: list[str] = []
+    seen: set[str] = set()
+    for idx, raw in enumerate(value):
+        if not isinstance(raw, str) or not raw.strip():
+            _fail(errors, f"vendor[{key}].feature_inventory[{idx}] must be non-empty string")
+            continue
+        slug = raw.strip()
+        if slug in seen:
+            _fail(errors, f"vendor[{key}].feature_inventory duplicate entry: {slug}")
+            continue
+        seen.add(slug)
+        normalized.append(slug)
+
+    return normalized
+
+
+def _validate_candidate_slug(
+    candidate_slug: str,
+    inventory: set[str],
+    prefix: str,
+    errors: list[str],
+) -> None:
+    if not candidate_slug:
+        _fail(errors, f"{prefix}.slug must be non-empty string")
+        return
+
+    if candidate_slug in inventory:
+        return
+
+    parts = [part for part in candidate_slug.split("-") if part]
+    if not parts:
+        _fail(errors, f"{prefix}.slug invalid composite tokenization: {candidate_slug!r}")
+        return
+
+    unknown = [part for part in parts if part not in inventory]
+    if unknown:
+        _fail(
+            errors,
+            f"{prefix}.slug references unknown features: {', '.join(unknown)}",
+        )
+
+
 def _validate_promoted_candidate(
     candidate: dict[str, Any],
     prefix: str,
@@ -65,8 +144,11 @@ def _validate_vendor(vendor: dict[str, Any], max_age_days: int, errors: list[str
         "status",
         "evaluated_at",
         "audited_version",
+        "profile",
+        "feature_inventory",
         "default_policy",
         "candidates",
+        "source_receipts",
         "decision_summary",
     }
     missing = sorted(required - set(vendor))
@@ -94,6 +176,16 @@ def _validate_vendor(vendor: dict[str, Any], max_age_days: int, errors: list[str
                 f"vendor[{key}] stale evidence: evaluated_at={evaluated_at.isoformat()} exceeds max_age_days={max_age_days}",
             )
 
+    feature_inventory = _normalize_feature_inventory(vendor.get("feature_inventory"), key, errors)
+    feature_inventory_set = set(feature_inventory)
+
+    if status == "evaluated":
+        audited_version = str(vendor.get("audited_version", "")).strip()
+        if not audited_version:
+            _fail(errors, f"vendor[{key}] evaluated status requires non-empty audited_version")
+        if not feature_inventory_set:
+            _fail(errors, f"vendor[{key}] evaluated status requires non-empty feature_inventory")
+
     default_policy = vendor.get("default_policy")
     if not isinstance(default_policy, dict):
         _fail(errors, f"vendor[{key}].default_policy must be object")
@@ -107,6 +199,8 @@ def _validate_vendor(vendor: dict[str, Any], max_age_days: int, errors: list[str
     for flag, value in experimental_flags.items():
         if not isinstance(value, bool):
             _fail(errors, f"vendor[{key}].default_policy.experimental_flags.{flag} must be boolean")
+        if flag not in feature_inventory_set:
+            _fail(errors, f"vendor[{key}].default_policy.experimental_flags.{flag} not in feature_inventory")
 
     candidates = vendor.get("candidates")
     if not isinstance(candidates, list):
@@ -115,6 +209,8 @@ def _validate_vendor(vendor: dict[str, Any], max_age_days: int, errors: list[str
 
     if status == "evaluated" and not candidates:
         _fail(errors, f"vendor[{key}] evaluated status requires non-empty candidates")
+    if status in {"pending_evidence", "not_applicable"} and candidates:
+        _fail(errors, f"vendor[{key}] status={status} must not include candidate evaluations")
 
     promote_count = 0
     for idx, candidate in enumerate(candidates):
@@ -134,6 +230,12 @@ def _validate_vendor(vendor: dict[str, Any], max_age_days: int, errors: list[str
         ):
             if ck not in candidate:
                 _fail(errors, f"{prefix} missing key: {ck}")
+
+        slug_value = candidate.get("slug")
+        if not isinstance(slug_value, str):
+            _fail(errors, f"{prefix}.slug must be string")
+            continue
+        _validate_candidate_slug(slug_value, feature_inventory_set, prefix, errors)
 
         decision = candidate.get("decision")
         if decision not in ALLOWED_DECISIONS:
@@ -191,7 +293,7 @@ def _live_check_codex(vendor: dict[str, Any], require_codex: bool, errors: list[
 def _validate_payload(payload: dict[str, Any], max_age_days: int) -> tuple[list[dict[str, Any]], list[str]]:
     errors: list[str] = []
 
-    required_top = {"schema_version", "generated_at", "policy", "vendors"}
+    required_top = {"schema_version", "generated_at", "required_vendor_surfaces", "policy", "vendors"}
     missing = sorted(required_top - set(payload))
     if missing:
         _fail(errors, f"missing top-level keys: {', '.join(missing)}")
@@ -220,6 +322,8 @@ def _validate_payload(payload: dict[str, Any], max_age_days: int) -> tuple[list[
         _fail(errors, "vendors must be non-empty array")
         return [], errors
 
+    required_surfaces = _parse_required_vendor_surfaces(payload, errors)
+
     seen: set[tuple[str, str]] = set()
     parsed_vendors: list[dict[str, Any]] = []
     for vendor in vendors:
@@ -237,6 +341,10 @@ def _validate_payload(payload: dict[str, Any], max_age_days: int) -> tuple[list[
 
         _validate_vendor(vendor, max_age_days=max_age_days, errors=errors)
         parsed_vendors.append(vendor)
+
+    missing_surfaces = sorted(required_surfaces - seen)
+    for vendor_id, surface_id in missing_surfaces:
+        _fail(errors, f"required vendor/surface missing from vendors: {vendor_id}/{surface_id}")
 
     return parsed_vendors, errors
 

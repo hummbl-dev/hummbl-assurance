@@ -66,10 +66,11 @@ make feature-gate-live
 
 `feature-gate` validates:
 
+- required vendor/surface registry coverage is complete
 - each evaluated vendor surface has deterministic gate evidence
 - no candidate is promoted unless all non-manual gates pass and confounds are absent
 - gate artifact freshness is within policy bounds
-- default experimental flags for evaluated surfaces remain policy-conformant
+- default experimental flags and candidate slugs are inventory-consistent
 
 ## Merge Policy
 

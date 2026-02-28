@@ -55,6 +55,10 @@ All notable changes to this repository are documented here.
 - CI workflows now run `conformance/verify_vendor_feature_gates.py`:
   - `.github/workflows/conformance.yml`
   - `.github/workflows/release-artifacts.yml`
+- Hardened multi-vendor feature gate verification:
+  - enforce `required_vendor_surfaces` coverage
+  - enforce deterministic `feature_inventory` coherence for flags and candidate slugs
+  - enforce evaluated-surface completeness (`audited_version`, inventory, candidate presence)
 
 ## 2026-02-27
 

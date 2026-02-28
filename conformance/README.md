@@ -64,5 +64,12 @@ Vendor experimental feature gate check:
 python3 conformance/verify_vendor_feature_gates.py
 ```
 
+The vendor gate verifier enforces:
+
+- required vendor surface registry coverage (`required_vendor_surfaces`)
+- deterministic vendor status model (`evaluated`, `pending_evidence`, `not_applicable`)
+- inventory coherence between `feature_inventory`, `experimental_flags`, and candidate slugs
+- freshness and promotion safety constraints for evaluated surfaces
+
 The fixtures are intentionally synthetic and contain no production secrets,
 runtime internals, or private governance canon content.

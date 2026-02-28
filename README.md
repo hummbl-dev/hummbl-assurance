@@ -54,6 +54,7 @@ Exit codes:
 - `SPEC.md` - normative assurance spec
 - `conformance/` - schemas, fixtures, canonicalization rules, verifier
   - includes vendor gate artifacts (`vendor_experimental_feature_gates.json`) and verifier (`verify_vendor_feature_gates.py`)
+  - vendor gate enforces required vendor surface registry coverage and deterministic feature-inventory coherence
 - `CONTRIBUTING.md` - PR/merge protocol and branch policy expectations
 - `RELEASE_POLICY.md` - tagging and release discipline
 - `OPERATING_MODEL.md` - operator authority, rollback protocol, release receipts

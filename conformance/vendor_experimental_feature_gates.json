@@ -1,6 +1,28 @@
 {
   "schema_version": "eal.vendor.experimental.feature.gates.v1",
-  "generated_at": "2026-02-28T15:50:00+00:00",
+  "generated_at": "2026-02-28T16:00:00+00:00",
+  "required_vendor_surfaces": [
+    {
+      "vendor_id": "openai",
+      "surface_id": "codex_cli"
+    },
+    {
+      "vendor_id": "anthropic",
+      "surface_id": "claude_code_cli"
+    },
+    {
+      "vendor_id": "google",
+      "surface_id": "gemini_cli"
+    },
+    {
+      "vendor_id": "openrouter",
+      "surface_id": "openrouter_api"
+    },
+    {
+      "vendor_id": "ollama",
+      "surface_id": "ollama_local"
+    }
+  ],
   "policy": {
     "value_gate_min_speedup_ratio": 0.2,
     "manual_gate_requirements": {
@@ -16,6 +38,12 @@
       "evaluated_at": "2026-02-28T15:04:33.512768+00:00",
       "audited_version": "codex-cli 0.106.0",
       "profile": "exp_pilot",
+      "feature_inventory": [
+        "multi_agent",
+        "apps",
+        "prevent_idle_sleep",
+        "js_repl"
+      ],
       "default_policy": {
         "description": "Stable-only default profile; all Codex experimental flags remain disabled.",
         "experimental_flags": {
@@ -134,9 +162,10 @@
       "vendor_id": "anthropic",
       "surface_id": "claude_code_cli",
       "status": "pending_evidence",
-      "evaluated_at": "2026-02-28T15:50:00+00:00",
+      "evaluated_at": "2026-02-28T16:00:00+00:00",
       "audited_version": "",
       "profile": "exp_pilot",
+      "feature_inventory": [],
       "default_policy": {
         "description": "Pending vendor-specific experimental inventory and baseline matrix.",
         "experimental_flags": {}
@@ -149,9 +178,10 @@
       "vendor_id": "google",
       "surface_id": "gemini_cli",
       "status": "pending_evidence",
-      "evaluated_at": "2026-02-28T15:50:00+00:00",
+      "evaluated_at": "2026-02-28T16:00:00+00:00",
       "audited_version": "",
       "profile": "exp_pilot",
+      "feature_inventory": [],
       "default_policy": {
         "description": "Pending vendor-specific experimental inventory and baseline matrix.",
         "experimental_flags": {}
@@ -164,9 +194,10 @@
       "vendor_id": "openrouter",
       "surface_id": "openrouter_api",
       "status": "pending_evidence",
-      "evaluated_at": "2026-02-28T15:50:00+00:00",
+      "evaluated_at": "2026-02-28T16:00:00+00:00",
       "audited_version": "",
       "profile": "exp_pilot",
+      "feature_inventory": [],
       "default_policy": {
         "description": "Pending vendor-specific experimental inventory and baseline matrix.",
         "experimental_flags": {}
@@ -179,9 +210,10 @@
       "vendor_id": "ollama",
       "surface_id": "ollama_local",
       "status": "pending_evidence",
-      "evaluated_at": "2026-02-28T15:50:00+00:00",
+      "evaluated_at": "2026-02-28T16:00:00+00:00",
       "audited_version": "",
       "profile": "exp_pilot",
+      "feature_inventory": [],
       "default_policy": {
         "description": "Pending vendor-specific experimental inventory and baseline matrix.",
         "experimental_flags": {}
