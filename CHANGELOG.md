@@ -36,6 +36,8 @@ All notable changes to this repository are documented here.
   - `scripts/verify_release_receipt.sh`
   - `make release-receipt TAG=vX.Y.Z`
   - `cut-release` now enforces successful tag workflows and required assets
+- Fixed release-receipt gate race by waiting for release object creation after
+  tag push before evaluating workflows/assets.
 
 ## 2026-02-27
 

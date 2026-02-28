@@ -70,10 +70,14 @@ require_workflow_success() {
 }
 
 release_json="$(gh release view "$TAG" --repo "$REPO" --json tagName,url,assets 2>/dev/null || true)"
-if [[ -z "$release_json" ]]; then
-  echo "FAIL release.present=false tag=${TAG}" >&2
-  exit 1
-fi
+while [[ -z "$release_json" ]]; do
+  if (( SECONDS >= DEADLINE )); then
+    echo "FAIL release.present=false tag=${TAG} timeout=true" >&2
+    exit 1
+  fi
+  sleep "$POLL"
+  release_json="$(gh release view "$TAG" --repo "$REPO" --json tagName,url,assets 2>/dev/null || true)"
+done
 
 echo "PASS release.present=true tag=${TAG}"
 
