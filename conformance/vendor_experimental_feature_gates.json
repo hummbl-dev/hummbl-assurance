@@ -162,19 +162,74 @@
       "vendor_id": "anthropic",
       "surface_id": "claude_code_cli",
       "status": "pending_evidence",
-      "evaluated_at": "2026-02-28T16:00:00+00:00",
+      "evaluated_at": "2026-02-28T16:10:00+00:00",
       "audited_version": "2.1.63 (Claude Code)",
       "profile": "exp_pilot",
       "feature_inventory": [
-        "betas"
+        "experimental_agent_teams",
+        "auto_compact_pct_override",
+        "max_output_tokens",
+        "bash_default_timeout",
+        "hooks",
+        "status_line",
+        "enable_tool_search",
+        "enable_tasks",
+        "auto_memory",
+        "terminal_progress_bar",
+        "always_thinking",
+        "fast_mode_per_session_opt_in",
+        "enable_telemetry",
+        "enable_prompt_suggestion",
+        "precompact_hooks",
+        "task_list_id"
       ],
       "default_policy": {
-        "description": "Pending vendor-specific experimental inventory and baseline matrix.",
-        "experimental_flags": {}
+        "description": "Stable-only default profile; curated experimental toggles remain default-off pending scorecard evidence.",
+        "experimental_flags": {
+          "experimental_agent_teams": false,
+          "enable_tool_search": false,
+          "terminal_progress_bar": false,
+          "always_thinking": false,
+          "fast_mode_per_session_opt_in": false,
+          "enable_telemetry": false,
+          "enable_prompt_suggestion": false,
+          "precompact_hooks": false,
+          "task_list_id": false
+        }
       },
       "candidates": [],
-      "source_receipts": {},
-      "decision_summary": "Pending pilot runs and scorecards."
+      "source_receipts": {
+        "inventory_snapshot": "conformance/vendor_receipts/anthropic_claude_code_inventory_2026-02-28.json"
+      },
+      "implementation_snapshot": {
+        "enabled": [
+          "experimental_agent_teams",
+          "auto_compact_pct_override",
+          "max_output_tokens",
+          "bash_default_timeout",
+          "hooks",
+          "status_line",
+          "enable_tool_search",
+          "enable_tasks",
+          "auto_memory"
+        ],
+        "not_enabled_candidates": [
+          "terminal_progress_bar",
+          "always_thinking",
+          "fast_mode_per_session_opt_in",
+          "enable_telemetry",
+          "enable_prompt_suggestion",
+          "precompact_hooks",
+          "task_list_id"
+        ],
+        "priority_next": [
+          "task_list_id",
+          "terminal_progress_bar",
+          "precompact_hooks",
+          "always_thinking"
+        ]
+      },
+      "decision_summary": "Anthropic inventory curated from operator research; maintain pending_evidence until baseline + scorecards are produced."
     },
     {
       "vendor_id": "google",

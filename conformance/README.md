@@ -11,6 +11,7 @@ Supporting artifacts:
 - `release_receipt.schema.json`: release governance manifest schema (`eal.release.receipt.v1`)
 - `vendor_experimental_feature_gates.json`: pinned multi-vendor experimental feature promotion decisions
 - `collect_vendor_surface_evidence.py`: vendor surface probe (CLI/API availability, version, candidate experimental inventory)
+- `vendor_receipts/`: curated vendor research receipts (implemented vs candidate features)
 - `compatibility_rules.md`: deterministic Compat calculus and reason precedence
 - `CANONICALIZATION.md`: canonical JSON and hashing rules
 - `ip_boundary.md`: allowed vs non-publishable artifact matrix

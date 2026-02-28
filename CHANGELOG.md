@@ -67,6 +67,9 @@ All notable changes to this repository are documented here.
   - `.github/workflows/conformance.yml` writes `artifacts/vendor_surface_evidence.json`
   - `.github/workflows/release-artifacts.yml` includes the artifact in release uploads and checksums
   - `scripts/verify_release_receipt.sh` now requires `vendor_surface_evidence.json`
+- Added curated Anthropic vendor inventory receipt and gate snapshot:
+  - `conformance/vendor_receipts/anthropic_claude_code_inventory_2026-02-28.json`
+  - updated `anthropic/claude_code_cli` entry in `vendor_experimental_feature_gates.json`
 
 ## 2026-02-27
 

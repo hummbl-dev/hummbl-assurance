@@ -1,0 +1,98 @@
+{
+  "schema_version": "eal.vendor.inventory.receipt.v1",
+  "vendor_id": "anthropic",
+  "surface_id": "claude_code_cli",
+  "recorded_at": "2026-02-28T16:10:00+00:00",
+  "audited_version": "2.1.63 (Claude Code)",
+  "source": "operator_research_snapshot",
+  "enabled": [
+    {
+      "slug": "experimental_agent_teams",
+      "setting": "CLAUDE_CODE_EXPERIMENTAL_AGENT_TEAMS=1",
+      "status": "on"
+    },
+    {
+      "slug": "auto_compact_pct_override",
+      "setting": "CLAUDE_CODE_AUTOCOMPACT_PCT_OVERRIDE=80",
+      "status": "on"
+    },
+    {
+      "slug": "max_output_tokens",
+      "setting": "CLAUDE_CODE_MAX_OUTPUT_TOKENS=64000",
+      "status": "on"
+    },
+    {
+      "slug": "bash_default_timeout",
+      "setting": "BASH_DEFAULT_TIMEOUT_MS=300000",
+      "status": "on"
+    },
+    {
+      "slug": "hooks",
+      "setting": "SessionStart/PreToolUse/PostToolUse/Notification hooks",
+      "status": "on"
+    },
+    {
+      "slug": "status_line",
+      "setting": "custom status line script",
+      "status": "on"
+    },
+    {
+      "slug": "enable_tool_search",
+      "setting": "ENABLE_TOOL_SEARCH",
+      "status": "on"
+    },
+    {
+      "slug": "enable_tasks",
+      "setting": "CLAUDE_CODE_ENABLE_TASKS",
+      "status": "on"
+    },
+    {
+      "slug": "auto_memory",
+      "setting": "session auto memory",
+      "status": "on"
+    }
+  ],
+  "not_enabled_candidates": [
+    {
+      "slug": "terminal_progress_bar",
+      "setting": "terminalProgressBarEnabled=true",
+      "status": "off"
+    },
+    {
+      "slug": "always_thinking",
+      "setting": "alwaysThinkingEnabled=true",
+      "status": "off"
+    },
+    {
+      "slug": "fast_mode_per_session_opt_in",
+      "setting": "fastModePerSessionOptIn=true",
+      "status": "off"
+    },
+    {
+      "slug": "enable_telemetry",
+      "setting": "CLAUDE_CODE_ENABLE_TELEMETRY=1",
+      "status": "off"
+    },
+    {
+      "slug": "enable_prompt_suggestion",
+      "setting": "CLAUDE_CODE_ENABLE_PROMPT_SUGGESTION",
+      "status": "off"
+    },
+    {
+      "slug": "precompact_hooks",
+      "setting": "PreCompact hooks",
+      "status": "off"
+    },
+    {
+      "slug": "task_list_id",
+      "setting": "CLAUDE_CODE_TASK_LIST_ID",
+      "status": "off"
+    }
+  ],
+  "priority_next": [
+    "task_list_id",
+    "terminal_progress_bar",
+    "precompact_hooks",
+    "always_thinking"
+  ]
+}
