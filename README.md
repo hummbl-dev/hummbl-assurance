@@ -50,6 +50,7 @@ Exit codes:
 - `conformance/` - schemas, fixtures, canonicalization rules, verifier
 - `CONTRIBUTING.md` - PR/merge protocol and branch policy expectations
 - `RELEASE_POLICY.md` - tagging and release discipline
+- `OPERATING_MODEL.md` - operator authority, rollback protocol, release receipts
 
 ## Governance
 

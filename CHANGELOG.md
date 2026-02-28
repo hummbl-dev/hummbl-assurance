@@ -27,6 +27,8 @@ All notable changes to this repository are documented here.
   - reruns conformance on `v*` tags and uploads verifier artifacts to GitHub Releases
 - Fixed release artifact upload edge case for empty diff files by writing `NO_DIFF`
   sentinel content before upload.
+- Added governance operating model:
+  - `OPERATING_MODEL.md` (tag authority, rollback protocol, release receipt checklist)
 
 ## 2026-02-27
 
