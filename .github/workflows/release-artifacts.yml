@@ -34,7 +34,11 @@ jobs:
       - name: Compare verifier outputs for drift
         run: |
           diff -u artifacts/verify_run1.txt artifacts/verify_run2.txt > artifacts/verify_diff.txt || true
-          test ! -s artifacts/verify_diff.txt
+          if [ -s artifacts/verify_diff.txt ]; then
+            echo "Verifier output drift detected; see artifacts/verify_diff.txt" >&2
+            exit 1
+          fi
+          printf '%s\n' "NO_DIFF" > artifacts/verify_diff.txt
 
       - name: Generate checksums
         run: |

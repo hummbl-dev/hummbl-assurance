@@ -25,6 +25,8 @@ All notable changes to this repository are documented here.
 - Added tag-triggered release artifact workflow:
   - `.github/workflows/release-artifacts.yml`
   - reruns conformance on `v*` tags and uploads verifier artifacts to GitHub Releases
+- Fixed release artifact upload edge case for empty diff files by writing `NO_DIFF`
+  sentinel content before upload.
 
 ## 2026-02-27
 
