@@ -22,6 +22,9 @@ All notable changes to this repository are documented here.
   - `R5_RECEIPT_MULTI_REASON_INVALID`
   - `C8_MULTI_REASON_INCOMPATIBLE`
   - `C9_MULTI_REASON_CONDITIONAL`
+- Added tag-triggered release artifact workflow:
+  - `.github/workflows/release-artifacts.yml`
+  - reruns conformance on `v*` tags and uploads verifier artifacts to GitHub Releases
 
 ## 2026-02-27
 
