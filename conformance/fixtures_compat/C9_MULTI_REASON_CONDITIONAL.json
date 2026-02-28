@@ -1,0 +1,84 @@
+{
+  "test_id": "C9_MULTI_REASON_CONDITIONAL",
+  "description": "Conditional classification emits ordered conditional reason codes",
+  "inputs": {
+    "contract_a": {
+      "contract_id": "contract-c9-a",
+      "contract_version": "1.0.0",
+      "contract_sha256": "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa1",
+      "action_space": [
+        "ACT_READ_STATUS",
+        "ACT_SEND_NOTIFICATION"
+      ],
+      "constraints": {
+        "budget_max": 100,
+        "max_steps": 5
+      },
+      "risk_policy": {
+        "ACT_READ_STATUS": 1,
+        "ACT_SEND_NOTIFICATION": 1
+      },
+      "semantics_changed": false
+    },
+    "contract_b": {
+      "contract_id": "contract-c9-b",
+      "contract_version": "2.0.0",
+      "contract_sha256": "bbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb2",
+      "action_space": [
+        "ACT_READ_STATUS",
+        "ACT_SEND_NOTIFICATION",
+        "ACT_ARCHIVE"
+      ],
+      "constraints": {
+        "budget_max": 80,
+        "max_steps": 5,
+        "timeout_seconds": 60
+      },
+      "risk_policy": {
+        "ACT_READ_STATUS": 2,
+        "ACT_SEND_NOTIFICATION": 1,
+        "ACT_ARCHIVE": 1
+      },
+      "semantics_changed": false
+    }
+  },
+  "expected_compat_report": {
+    "schema_version": "eal.compat.report.v1",
+    "classification": "CONDITIONAL",
+    "primary_reason_code": "COMPAT_CONSTRAINT_ADDED",
+    "reason_codes": [
+      "COMPAT_CONSTRAINT_ADDED",
+      "COMPAT_CONSTRAINT_TIGHTENED",
+      "COMPAT_RISK_INCREASED"
+    ],
+    "contract_a_ref": {
+      "contract_id": "contract-c9-a",
+      "contract_hash": "sha256:aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa1"
+    },
+    "contract_b_ref": {
+      "contract_id": "contract-c9-b",
+      "contract_hash": "sha256:bbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb2"
+    },
+    "diff_summary": {
+      "actions_added": [
+        "ACT_ARCHIVE"
+      ],
+      "actions_removed": [],
+      "constraints_added": [
+        "timeout_seconds"
+      ],
+      "constraints_removed": [],
+      "constraints_tightened": [
+        "budget_max"
+      ],
+      "constraints_loosened": [],
+      "risk_increased": [
+        "ACT_READ_STATUS"
+      ],
+      "risk_decreased": [],
+      "semantics_changed": false
+    },
+    "evaluator_profile": "eal-fixture-profile-v1"
+  },
+  "expected_compat_report_sha256": "96b9bdbbc88aa185156e8959383c6ab70c5e73519cb8f7f338a1a322fadad3ad"
+}

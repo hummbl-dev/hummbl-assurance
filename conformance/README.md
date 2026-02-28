@@ -23,9 +23,9 @@ Each fixture file includes:
 Fixture sets:
 
 - `fixtures/`: validation fixtures (`T1-T5`)
-- `fixtures_receipt/`: receipt determinism fixtures (`R1-R4`)
+- `fixtures_receipt/`: receipt determinism fixtures (`R1-R5`)
 - `fixtures_temporal/`: epoch bridge fixture (`T6`)
-- `fixtures_compat/`: compatibility calculus fixtures (`C1-C7`)
+- `fixtures_compat/`: compatibility calculus fixtures (`C1-C9`)
 
 Canonicalization rule:
 

@@ -18,6 +18,10 @@ All notable changes to this repository are documented here.
 
 - `conformance/verify_conformance.py` now validates CLI parity against fixture
   expected reports and expected exit codes.
+- Added multi-reason precedence fixtures for validation and compatibility:
+  - `R5_RECEIPT_MULTI_REASON_INVALID`
+  - `C8_MULTI_REASON_INCOMPATIBLE`
+  - `C9_MULTI_REASON_CONDITIONAL`
 
 ## 2026-02-27
 

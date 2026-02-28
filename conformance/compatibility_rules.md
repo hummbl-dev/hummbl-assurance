@@ -54,3 +54,5 @@ Reason codes MUST be emitted in this order when applicable:
 - `C5`: semantics change flag -> `INCOMPATIBLE`
 - `C6`: risk increase only -> `CONDITIONAL`
 - `C7`: constraint removal only -> `BACKWARD_COMPATIBLE`
+- `C8`: action removal + semantics change (+ other diffs) -> `INCOMPATIBLE`
+- `C9`: multi-reason conditional (constraint add + tighten + risk increase) -> `CONDITIONAL`
