@@ -52,7 +52,7 @@ Any change to canonical expected outputs (hashes) is a release-significant event
 
 ## Experimental Feature Gate
 
-Releases are blocked if the pinned experimental feature gate artifact fails validation.
+Releases are blocked if the pinned multi-vendor experimental feature gate artifact fails validation.
 
 ```bash
 make feature-gate
@@ -66,9 +66,10 @@ make feature-gate-live
 
 `feature-gate` validates:
 
-- default profile keeps experimental flags disabled
+- each evaluated vendor surface has deterministic gate evidence
 - no candidate is promoted unless all non-manual gates pass and confounds are absent
 - gate artifact freshness is within policy bounds
+- default experimental flags for evaluated surfaces remain policy-conformant
 
 ## Merge Policy
 

@@ -33,7 +33,7 @@ jobs:
 
       - name: Verify experimental feature gate
         run: |
-          python3 conformance/verify_feature_gate.py
+          python3 conformance/verify_vendor_feature_gates.py
 
       - name: Compare verifier outputs for drift
         run: |

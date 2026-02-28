@@ -1,0 +1,194 @@
+{
+  "schema_version": "eal.vendor.experimental.feature.gates.v1",
+  "generated_at": "2026-02-28T15:50:00+00:00",
+  "policy": {
+    "value_gate_min_speedup_ratio": 0.2,
+    "manual_gate_requirements": {
+      "security_gate": "passed",
+      "operability_gate": "passed"
+    }
+  },
+  "vendors": [
+    {
+      "vendor_id": "openai",
+      "surface_id": "codex_cli",
+      "status": "evaluated",
+      "evaluated_at": "2026-02-28T15:04:33.512768+00:00",
+      "audited_version": "codex-cli 0.106.0",
+      "profile": "exp_pilot",
+      "default_policy": {
+        "description": "Stable-only default profile; all Codex experimental flags remain disabled.",
+        "experimental_flags": {
+          "multi_agent": false,
+          "apps": false,
+          "prevent_idle_sleep": false,
+          "js_repl": false
+        }
+      },
+      "candidates": [
+        {
+          "slug": "multi_agent",
+          "task_count_scored": 4,
+          "task_count_excluded_confounds": 0,
+          "confounded": false,
+          "speedup_ratio": -0.0129,
+          "gates": {
+            "reliability_gate": true,
+            "value_gate": false,
+            "signal_quality_gate": true,
+            "security_gate": "manual-review-required",
+            "operability_gate": "manual-rollback-drill-required"
+          },
+          "decision": "hold"
+        },
+        {
+          "slug": "apps",
+          "task_count_scored": 4,
+          "task_count_excluded_confounds": 0,
+          "confounded": false,
+          "speedup_ratio": -0.0083,
+          "gates": {
+            "reliability_gate": true,
+            "value_gate": false,
+            "signal_quality_gate": true,
+            "security_gate": "manual-review-required",
+            "operability_gate": "manual-rollback-drill-required"
+          },
+          "decision": "hold"
+        },
+        {
+          "slug": "js_repl",
+          "task_count_scored": 4,
+          "task_count_excluded_confounds": 0,
+          "confounded": false,
+          "speedup_ratio": -0.1634,
+          "gates": {
+            "reliability_gate": true,
+            "value_gate": false,
+            "signal_quality_gate": true,
+            "security_gate": "manual-review-required",
+            "operability_gate": "manual-rollback-drill-required"
+          },
+          "decision": "no-go"
+        },
+        {
+          "slug": "prevent_idle_sleep",
+          "task_count_scored": 3,
+          "task_count_excluded_confounds": 1,
+          "confounded": true,
+          "speedup_ratio": -0.112,
+          "gates": {
+            "reliability_gate": "inconclusive-confounded-data",
+            "value_gate": "inconclusive-confounded-data",
+            "signal_quality_gate": "inconclusive-confounded-data",
+            "security_gate": "manual-review-required",
+            "operability_gate": "manual-rollback-drill-required"
+          },
+          "decision": "no-go"
+        },
+        {
+          "slug": "multi_agent-apps",
+          "task_count_scored": 4,
+          "task_count_excluded_confounds": 0,
+          "confounded": false,
+          "speedup_ratio": 0.0529,
+          "gates": {
+            "reliability_gate": true,
+            "value_gate": false,
+            "signal_quality_gate": true,
+            "security_gate": "manual-review-required",
+            "operability_gate": "manual-rollback-drill-required"
+          },
+          "decision": "hold"
+        },
+        {
+          "slug": "multi_agent-prevent_idle_sleep",
+          "task_count_scored": 1,
+          "task_count_excluded_confounds": 3,
+          "confounded": true,
+          "speedup_ratio": -0.2101,
+          "gates": {
+            "reliability_gate": "inconclusive-confounded-data",
+            "value_gate": "inconclusive-confounded-data",
+            "signal_quality_gate": "inconclusive-confounded-data",
+            "security_gate": "manual-review-required",
+            "operability_gate": "manual-rollback-drill-required"
+          },
+          "decision": "no-go"
+        }
+      ],
+      "source_receipts": {
+        "baseline": "/Users/others/_state/codex_feature_pilot/latest-baseline.json",
+        "scorecards": [
+          "/Users/others/_state/codex_feature_pilot/latest-scorecard-multi_agent.json",
+          "/Users/others/_state/codex_feature_pilot/latest-scorecard-apps.json",
+          "/Users/others/_state/codex_feature_pilot/latest-scorecard-js_repl.json",
+          "/Users/others/_state/codex_feature_pilot/latest-scorecard-prevent_idle_sleep.json",
+          "/Users/others/_state/codex_feature_pilot/latest-scorecard-multi_agent-apps.json",
+          "/Users/others/_state/codex_feature_pilot/latest-scorecard-multi_agent-prevent_idle_sleep.json"
+        ]
+      },
+      "decision_summary": "No tested Codex experimental feature is promoted to default-on; stable profile remains authoritative."
+    },
+    {
+      "vendor_id": "anthropic",
+      "surface_id": "claude_code_cli",
+      "status": "pending_evidence",
+      "evaluated_at": "2026-02-28T15:50:00+00:00",
+      "audited_version": "",
+      "profile": "exp_pilot",
+      "default_policy": {
+        "description": "Pending vendor-specific experimental inventory and baseline matrix.",
+        "experimental_flags": {}
+      },
+      "candidates": [],
+      "source_receipts": {},
+      "decision_summary": "Pending pilot runs and scorecards."
+    },
+    {
+      "vendor_id": "google",
+      "surface_id": "gemini_cli",
+      "status": "pending_evidence",
+      "evaluated_at": "2026-02-28T15:50:00+00:00",
+      "audited_version": "",
+      "profile": "exp_pilot",
+      "default_policy": {
+        "description": "Pending vendor-specific experimental inventory and baseline matrix.",
+        "experimental_flags": {}
+      },
+      "candidates": [],
+      "source_receipts": {},
+      "decision_summary": "Pending pilot runs and scorecards."
+    },
+    {
+      "vendor_id": "openrouter",
+      "surface_id": "openrouter_api",
+      "status": "pending_evidence",
+      "evaluated_at": "2026-02-28T15:50:00+00:00",
+      "audited_version": "",
+      "profile": "exp_pilot",
+      "default_policy": {
+        "description": "Pending vendor-specific experimental inventory and baseline matrix.",
+        "experimental_flags": {}
+      },
+      "candidates": [],
+      "source_receipts": {},
+      "decision_summary": "Pending pilot runs and scorecards."
+    },
+    {
+      "vendor_id": "ollama",
+      "surface_id": "ollama_local",
+      "status": "pending_evidence",
+      "evaluated_at": "2026-02-28T15:50:00+00:00",
+      "audited_version": "",
+      "profile": "exp_pilot",
+      "default_policy": {
+        "description": "Pending vendor-specific experimental inventory and baseline matrix.",
+        "experimental_flags": {}
+      },
+      "candidates": [],
+      "source_receipts": {},
+      "decision_summary": "Pending pilot runs and scorecards."
+    }
+  ]
+}

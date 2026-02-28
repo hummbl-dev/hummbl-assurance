@@ -14,10 +14,10 @@ cli-smoke:
 	./eal compat --help >/dev/null
 
 feature-gate:
-	python3 conformance/verify_feature_gate.py
+	python3 conformance/verify_vendor_feature_gates.py
 
 feature-gate-live:
-	python3 conformance/verify_feature_gate.py --live-check --require-codex
+	python3 conformance/verify_vendor_feature_gates.py --live-check --require-codex
 
 protection-audit:
 	./scripts/audit_branch_protection.sh main

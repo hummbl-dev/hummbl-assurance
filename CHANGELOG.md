@@ -15,8 +15,8 @@ All notable changes to this repository are documented here.
   - `aaa_eal/cli.py`
   - `aaa_eal/__main__.py`
 - Experimental feature governance gate:
-  - `conformance/experimental_feature_gate.json`
-  - `conformance/verify_feature_gate.py`
+  - `conformance/vendor_experimental_feature_gates.json`
+  - `conformance/verify_vendor_feature_gates.py`
   - `make feature-gate`
   - `make feature-gate-live`
 
@@ -52,7 +52,7 @@ All notable changes to this repository are documented here.
   - `T9_TEMPORAL_EPOCH_AMBIGUOUS`
   - `T10_TEMPORAL_CONTRACT_COLLISION_PRECEDENCE`
 - `make release-check` now includes `feature-gate`.
-- CI workflows now run `conformance/verify_feature_gate.py`:
+- CI workflows now run `conformance/verify_vendor_feature_gates.py`:
   - `.github/workflows/conformance.yml`
   - `.github/workflows/release-artifacts.yml`
 
