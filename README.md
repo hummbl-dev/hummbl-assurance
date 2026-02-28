@@ -19,6 +19,7 @@ It excludes runtime orchestration and model routing.
 ```bash
 make verify
 make verify-repeat
+make feature-gate
 make protection-audit
 make release-check
 # after a tag push
@@ -52,6 +53,7 @@ Exit codes:
 
 - `SPEC.md` - normative assurance spec
 - `conformance/` - schemas, fixtures, canonicalization rules, verifier
+  - includes `experimental_feature_gate.json` and `verify_feature_gate.py`
 - `CONTRIBUTING.md` - PR/merge protocol and branch policy expectations
 - `RELEASE_POLICY.md` - tagging and release discipline
 - `OPERATING_MODEL.md` - operator authority, rollback protocol, release receipts

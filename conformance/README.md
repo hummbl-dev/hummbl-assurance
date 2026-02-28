@@ -9,11 +9,13 @@ Supporting artifacts:
 - `receipt.schema.json`: minimal deterministic receipt schema (`eal.receipt.v1`)
 - `compat_report.schema.json`: compatibility report schema (`eal.compat.report.v1`)
 - `release_receipt.schema.json`: release governance manifest schema (`eal.release.receipt.v1`)
+- `experimental_feature_gate.json`: pinned experimental feature promotion decisions
 - `compatibility_rules.md`: deterministic Compat calculus and reason precedence
 - `CANONICALIZATION.md`: canonical JSON and hashing rules
 - `ip_boundary.md`: allowed vs non-publishable artifact matrix
 - `verify_conformance.py`: executable verifier (schema + precedence + hash)
   plus CLI parity (`./eal verify-receipt`, `./eal revalidate`, `./eal compat`)
+- `verify_feature_gate.py`: release gate verifier for experimental feature defaults and promotion constraints
 
 Each fixture file includes:
 
@@ -54,6 +56,12 @@ Full conformance check:
 
 ```bash
 python3 conformance/verify_conformance.py
+```
+
+Experimental feature gate check:
+
+```bash
+python3 conformance/verify_feature_gate.py
 ```
 
 The fixtures are intentionally synthetic and contain no production secrets,

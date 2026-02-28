@@ -21,6 +21,9 @@ jobs:
       - name: Run verifier (pass 2)
         run: |
           python3 conformance/verify_conformance.py | tee artifacts/verify_run2.txt
+      - name: Verify experimental feature gate
+        run: |
+          python3 conformance/verify_feature_gate.py
       - name: Compare outputs for determinism
         run: |
           diff -u artifacts/verify_run1.txt artifacts/verify_run2.txt > artifacts/verify_diff.txt || true

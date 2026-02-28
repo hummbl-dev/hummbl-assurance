@@ -1,4 +1,4 @@
-.PHONY: verify verify-repeat cli-smoke protection-audit release-check release-receipt cut-release
+.PHONY: verify verify-repeat cli-smoke feature-gate feature-gate-live protection-audit release-check release-receipt cut-release
 
 verify:
 	python3 conformance/verify_conformance.py
@@ -13,12 +13,19 @@ cli-smoke:
 	./eal revalidate --help >/dev/null
 	./eal compat --help >/dev/null
 
+feature-gate:
+	python3 conformance/verify_feature_gate.py
+
+feature-gate-live:
+	python3 conformance/verify_feature_gate.py --live-check --require-codex
+
 protection-audit:
 	./scripts/audit_branch_protection.sh main
 
 release-check:
 	$(MAKE) verify
 	$(MAKE) verify-repeat
+	$(MAKE) feature-gate
 	$(MAKE) protection-audit
 
 release-receipt:

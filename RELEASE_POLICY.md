@@ -12,9 +12,10 @@ Use semantic version tags: `vMAJOR.MINOR.PATCH`.
 
 1. `make verify`
 2. `make verify-repeat`
-3. `make protection-audit`
-4. Confirm `CHANGELOG.md` includes release notes
-5. Create annotated tag
+3. `make feature-gate`
+4. `make protection-audit`
+5. Confirm `CHANGELOG.md` includes release notes
+6. Create annotated tag
 
 ```bash
 make cut-release VERSION=vX.Y.Z
@@ -48,6 +49,26 @@ Any change to canonical expected outputs (hashes) is a release-significant event
 - explicit changelog entry
 - compatibility classification (`breaking` or `non-breaking`)
 - regenerated hashes under canonicalization rules
+
+## Experimental Feature Gate
+
+Releases are blocked if the pinned experimental feature gate artifact fails validation.
+
+```bash
+make feature-gate
+```
+
+Optional operator-only live environment parity check:
+
+```bash
+make feature-gate-live
+```
+
+`feature-gate` validates:
+
+- default profile keeps experimental flags disabled
+- no candidate is promoted unless all non-manual gates pass and confounds are absent
+- gate artifact freshness is within policy bounds
 
 ## Merge Policy
 

@@ -31,6 +31,10 @@ jobs:
         run: |
           python3 conformance/verify_conformance.py | tee artifacts/verify_run2.txt
 
+      - name: Verify experimental feature gate
+        run: |
+          python3 conformance/verify_feature_gate.py
+
       - name: Compare verifier outputs for drift
         run: |
           diff -u artifacts/verify_run1.txt artifacts/verify_run2.txt > artifacts/verify_diff.txt || true

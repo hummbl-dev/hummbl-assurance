@@ -1,0 +1,132 @@
+{
+  "schema_version": "eal.experimental.feature.gate.v1",
+  "evaluated_at": "2026-02-28T15:04:33.512768+00:00",
+  "audited_cli": "codex-cli 0.106.0",
+  "profile": "exp_pilot",
+  "default_profile": {
+    "description": "Stable-only default profile; all experimental flags remain disabled.",
+    "experimental_flags": {
+      "multi_agent": false,
+      "apps": false,
+      "prevent_idle_sleep": false,
+      "js_repl": false
+    }
+  },
+  "promotion_policy": {
+    "value_gate_min_speedup_ratio": 0.2,
+    "manual_gate_requirements": {
+      "security_gate": "passed",
+      "operability_gate": "passed"
+    }
+  },
+  "candidates": [
+    {
+      "slug": "multi_agent",
+      "scorecard": "latest-scorecard-multi_agent.json",
+      "task_count_scored": 4,
+      "task_count_excluded_confounds": 0,
+      "confounded": false,
+      "speedup_ratio": -0.0129,
+      "gates": {
+        "reliability_gate": true,
+        "value_gate": false,
+        "signal_quality_gate": true,
+        "security_gate": "manual-review-required",
+        "operability_gate": "manual-rollback-drill-required"
+      },
+      "decision": "hold"
+    },
+    {
+      "slug": "apps",
+      "scorecard": "latest-scorecard-apps.json",
+      "task_count_scored": 4,
+      "task_count_excluded_confounds": 0,
+      "confounded": false,
+      "speedup_ratio": -0.0083,
+      "gates": {
+        "reliability_gate": true,
+        "value_gate": false,
+        "signal_quality_gate": true,
+        "security_gate": "manual-review-required",
+        "operability_gate": "manual-rollback-drill-required"
+      },
+      "decision": "hold"
+    },
+    {
+      "slug": "js_repl",
+      "scorecard": "latest-scorecard-js_repl.json",
+      "task_count_scored": 4,
+      "task_count_excluded_confounds": 0,
+      "confounded": false,
+      "speedup_ratio": -0.1634,
+      "gates": {
+        "reliability_gate": true,
+        "value_gate": false,
+        "signal_quality_gate": true,
+        "security_gate": "manual-review-required",
+        "operability_gate": "manual-rollback-drill-required"
+      },
+      "decision": "no-go"
+    },
+    {
+      "slug": "prevent_idle_sleep",
+      "scorecard": "latest-scorecard-prevent_idle_sleep.json",
+      "task_count_scored": 3,
+      "task_count_excluded_confounds": 1,
+      "confounded": true,
+      "speedup_ratio": -0.112,
+      "gates": {
+        "reliability_gate": "inconclusive-confounded-data",
+        "value_gate": "inconclusive-confounded-data",
+        "signal_quality_gate": "inconclusive-confounded-data",
+        "security_gate": "manual-review-required",
+        "operability_gate": "manual-rollback-drill-required"
+      },
+      "decision": "no-go"
+    },
+    {
+      "slug": "multi_agent-apps",
+      "scorecard": "latest-scorecard-multi_agent-apps.json",
+      "task_count_scored": 4,
+      "task_count_excluded_confounds": 0,
+      "confounded": false,
+      "speedup_ratio": 0.0529,
+      "gates": {
+        "reliability_gate": true,
+        "value_gate": false,
+        "signal_quality_gate": true,
+        "security_gate": "manual-review-required",
+        "operability_gate": "manual-rollback-drill-required"
+      },
+      "decision": "hold"
+    },
+    {
+      "slug": "multi_agent-prevent_idle_sleep",
+      "scorecard": "latest-scorecard-multi_agent-prevent_idle_sleep.json",
+      "task_count_scored": 1,
+      "task_count_excluded_confounds": 3,
+      "confounded": true,
+      "speedup_ratio": -0.2101,
+      "gates": {
+        "reliability_gate": "inconclusive-confounded-data",
+        "value_gate": "inconclusive-confounded-data",
+        "signal_quality_gate": "inconclusive-confounded-data",
+        "security_gate": "manual-review-required",
+        "operability_gate": "manual-rollback-drill-required"
+      },
+      "decision": "no-go"
+    }
+  ],
+  "source_receipts": {
+    "baseline": "/Users/others/_state/codex_feature_pilot/latest-baseline.json",
+    "scorecards": [
+      "/Users/others/_state/codex_feature_pilot/latest-scorecard-multi_agent.json",
+      "/Users/others/_state/codex_feature_pilot/latest-scorecard-apps.json",
+      "/Users/others/_state/codex_feature_pilot/latest-scorecard-js_repl.json",
+      "/Users/others/_state/codex_feature_pilot/latest-scorecard-prevent_idle_sleep.json",
+      "/Users/others/_state/codex_feature_pilot/latest-scorecard-multi_agent-apps.json",
+      "/Users/others/_state/codex_feature_pilot/latest-scorecard-multi_agent-prevent_idle_sleep.json"
+    ]
+  },
+  "decision_summary": "No tested experimental feature is promoted to default-on; stable profile remains authoritative."
+}

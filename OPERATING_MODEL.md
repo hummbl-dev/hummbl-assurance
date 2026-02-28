@@ -62,7 +62,7 @@ Only a Release Operator may cut official tags.
 A release is valid only when all checks below pass.
 
 1. Local gate:
-   - `make release-check` passes (`verify`, `verify-repeat`, `protection-audit`)
+   - `make release-check` passes (`verify`, `verify-repeat`, `feature-gate`, `protection-audit`)
 2. Tag created from clean `main` with annotated message.
 3. Tag push triggers:
    - `conformance` workflow success
