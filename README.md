@@ -19,12 +19,20 @@ It excludes runtime orchestration and model routing.
 ```bash
 make verify
 make verify-repeat
+make protection-audit
 ```
 
 ## Layout
 
 - `SPEC.md` - normative assurance spec
 - `conformance/` - schemas, fixtures, canonicalization rules, verifier
+- `CONTRIBUTING.md` - PR/merge protocol and branch policy expectations
+- `RELEASE_POLICY.md` - tagging and release discipline
+
+## Governance
+
+- Branch protection is expected to enforce PR-first merges and required `verify` checks.
+- Run `make protection-audit` to detect protection drift.
 
 ## Determinism Contract
 

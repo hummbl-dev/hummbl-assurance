@@ -43,3 +43,11 @@ All notable changes to this repository are documented here.
   - conversation resolution required
   - admin enforcement enabled
   - force-push and branch deletion blocked
+
+### Added
+
+- Governance operator artifacts:
+  - `CONTRIBUTING.md`
+  - `RELEASE_POLICY.md`
+  - `scripts/audit_branch_protection.sh`
+- Make target `protection-audit` for policy drift checks.
