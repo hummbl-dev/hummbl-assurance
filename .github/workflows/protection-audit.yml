@@ -1,0 +1,33 @@
+name: protection-audit
+
+on:
+  workflow_dispatch:
+  schedule:
+    - cron: '17 9 * * *'
+  push:
+    branches:
+      - main
+    paths:
+      - '.github/workflows/protection-audit.yml'
+      - 'scripts/audit_branch_protection.sh'
+      - 'Makefile'
+
+jobs:
+  audit:
+    runs-on: ubuntu-latest
+    permissions:
+      contents: read
+    steps:
+      - uses: actions/checkout@v4
+      - name: Audit main branch protection
+        env:
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        run: |
+          mkdir -p artifacts
+          ./scripts/audit_branch_protection.sh main "$GITHUB_REPOSITORY" | tee artifacts/protection_audit.txt
+      - name: Upload audit artifact
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: protection-audit-artifacts
+          path: artifacts/

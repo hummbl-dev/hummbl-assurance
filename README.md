@@ -20,6 +20,7 @@ It excludes runtime orchestration and model routing.
 make verify
 make verify-repeat
 make protection-audit
+make release-check
 ```
 
 ## Layout
@@ -33,6 +34,7 @@ make protection-audit
 
 - Branch protection is expected to enforce PR-first merges and required `verify` checks.
 - Run `make protection-audit` to detect protection drift.
+- A scheduled GitHub workflow (`protection-audit`) runs daily and uploads audit artifacts.
 
 ## Determinism Contract
 

@@ -1,4 +1,4 @@
-.PHONY: verify verify-repeat protection-audit
+.PHONY: verify verify-repeat protection-audit release-check cut-release
 
 verify:
 	python3 conformance/verify_conformance.py
@@ -10,3 +10,12 @@ verify-repeat:
 
 protection-audit:
 	./scripts/audit_branch_protection.sh main
+
+release-check:
+	$(MAKE) verify
+	$(MAKE) verify-repeat
+	$(MAKE) protection-audit
+
+cut-release:
+	@test -n "$(VERSION)" || (echo "Usage: make cut-release VERSION=vX.Y.Z" >&2; exit 1)
+	./scripts/cut_release.sh "$(VERSION)"

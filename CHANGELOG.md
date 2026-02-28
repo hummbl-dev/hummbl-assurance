@@ -51,3 +51,7 @@ All notable changes to this repository are documented here.
   - `RELEASE_POLICY.md`
   - `scripts/audit_branch_protection.sh`
 - Make target `protection-audit` for policy drift checks.
+- Release/ops automation:
+  - `scripts/cut_release.sh`
+  - make targets: `release-check`, `cut-release`
+  - scheduled GitHub workflow: `.github/workflows/protection-audit.yml`

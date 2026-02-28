@@ -17,8 +17,7 @@ Use semantic version tags: `vMAJOR.MINOR.PATCH`.
 5. Create annotated tag
 
 ```bash
-git tag -a vX.Y.Z -m "release vX.Y.Z"
-git push origin vX.Y.Z
+make cut-release VERSION=vX.Y.Z
 ```
 
 ## Determinism Contract Changes
