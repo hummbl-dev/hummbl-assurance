@@ -41,6 +41,7 @@ All notable changes to this repository are documented here.
 - Added deterministic release receipt manifest publication:
   - `conformance/release_receipt.schema.json`
   - `release_receipt.json` emitted by tag workflow and uploaded to release assets
+- Fixed release manifest workflow parsing bug in conformance-run metadata step.
 
 ## 2026-02-27
 
