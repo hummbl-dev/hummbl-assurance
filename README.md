@@ -23,6 +23,27 @@ make protection-audit
 make release-check
 ```
 
+## CLI
+
+Run from repo root:
+
+```bash
+./eal verify-receipt --contract contract.json --receipt receipt.json
+./eal compat --contract-a contract_a.json --contract-b contract_b.json
+```
+
+Flags:
+
+- `--out <path>` write report JSON to file
+- `--pretty` emit indented JSON (default is canonical compact JSON)
+- `--print-hash` print report SHA-256 to stderr
+- `--schema-check` validate output against conformance schema
+
+Exit codes:
+
+- `verify-receipt`: `0=VALID`, `10=INVALID`, `11=INVALIDATED`, `12=INDETERMINATE`
+- `compat`: `0=BACKWARD_COMPATIBLE`, `20=CONDITIONAL`, `21=INCOMPATIBLE`
+
 ## Layout
 
 - `SPEC.md` - normative assurance spec

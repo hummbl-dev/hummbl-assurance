@@ -12,6 +12,7 @@ Supporting artifacts:
 - `CANONICALIZATION.md`: canonical JSON and hashing rules
 - `ip_boundary.md`: allowed vs non-publishable artifact matrix
 - `verify_conformance.py`: executable verifier (schema + precedence + hash)
+  plus CLI parity (`./eal verify-receipt`, `./eal compat`)
 
 Each fixture file includes:
 

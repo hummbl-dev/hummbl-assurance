@@ -9,56 +9,40 @@ Checks:
 - receipt fixtures: receipt schema validity + deterministic evaluator parity
 - temporal fixture: INVALIDATED-by-epoch bridge proof
 - compat fixtures: deterministic classifier parity
+- CLI parity: `eal verify-receipt` and `eal compat` match fixture outputs/exit codes
 """
 
 from __future__ import annotations
 
 import glob
-import hashlib
 import json
+import subprocess
+import sys
+import tempfile
 from pathlib import Path
 from typing import Any
 
 from jsonschema import validate
 
 
-EAL_PROFILE = "eal-fixture-profile-v1"
+ROOT = Path(__file__).resolve().parent.parent
+if str(ROOT) not in sys.path:
+    sys.path.insert(0, str(ROOT))
 
-EAL_PRECEDENCE = [
-    "E_INPUT_MALFORMED",
-    "E_CONTRACT_VERSION_COLLISION",
-    "E_SIG_INVALID",
-    "E_HASH_MISMATCH",
-    "E_EVIDENCE_MISSING",
-    "E_EPOCH_AMBIGUOUS",
-    "E_ACTION_OUT_OF_SPACE",
-    "E_BOUNDARY_MISMATCH",
-    "E_LOG_CHAIN_BREAK",
-    "E_LOG_SEQUENCE_GAP",
-    "E_REPLAY_DETECTED",
-    "E_EPOCH_INVALIDATED",
-    "E_OK_VALID",
-]
+from aaa_eal.core import (  # noqa: E402
+    COMPAT_EXIT_CODES,
+    COMPAT_PRECEDENCE,
+    EAL_PRECEDENCE,
+    VALIDATION_EXIT_CODES,
+    canonical_json_bytes,
+    evaluate_compat,
+    evaluate_validation,
+    sha256_hex,
+)
+
+
 EAL_PRECEDENCE_INDEX = {code: idx for idx, code in enumerate(EAL_PRECEDENCE)}
-
-COMPAT_PRECEDENCE = [
-    "COMPAT_ACTION_REMOVED",
-    "COMPAT_SEMANTICS_CHANGED",
-    "COMPAT_CONSTRAINT_ADDED",
-    "COMPAT_CONSTRAINT_TIGHTENED",
-    "COMPAT_RISK_INCREASED",
-    "COMPAT_BACKWARD_ONLY_RELAX_OR_ADD",
-]
 COMPAT_PRECEDENCE_INDEX = {code: idx for idx, code in enumerate(COMPAT_PRECEDENCE)}
-
-
-def canonical_json_bytes(obj: dict[str, Any]) -> bytes:
-    payload = json.dumps(obj, sort_keys=True, separators=(",", ":"), ensure_ascii=False)
-    return payload.encode("utf-8")
-
-
-def sha256_hex(obj: dict[str, Any]) -> str:
-    return hashlib.sha256(canonical_json_bytes(obj)).hexdigest()
 
 
 def verify_reason_order(report: dict[str, Any], precedence_index: dict[str, int], name: str) -> None:
@@ -96,144 +80,6 @@ def verify_report(
         raise ValueError(f"{name}: hash mismatch {digest} != {declared_hash}")
 
 
-def evaluate_receipt(inputs: dict[str, Any]) -> dict[str, Any]:
-    contract = inputs["contract"]
-    receipt = inputs["receipt"]
-
-    contract_sha = contract["contract_sha256"]
-    receipt_contract_sha = receipt["contract_ref"]["contract_sha256"]
-    signature = receipt["signature"]["sig"]
-    evidence = receipt["evidence"]
-
-    if receipt_contract_sha != contract_sha:
-        classification, code = "INVALID", "E_CONTRACT_VERSION_COLLISION"
-    elif signature == "INVALID":
-        classification, code = "INVALID", "E_SIG_INVALID"
-    elif not evidence:
-        classification, code = "INDETERMINATE", "E_EVIDENCE_MISSING"
-    else:
-        classification, code = "VALID", "E_OK_VALID"
-
-    return {
-        "schema_version": "eal.validation.report.v1",
-        "classification": classification,
-        "primary_reason_code": code,
-        "reason_codes": [code],
-        "contract_ref": {
-            "contract_id": receipt["contract_ref"]["contract_id"],
-            "contract_hash": f"sha256:{receipt_contract_sha}",
-        },
-        "receipt_ref": {
-            "receipt_id": receipt["execution_id"],
-            "receipt_hash": f"sha256:{receipt['integrity']['receipt_c14n_sha256']}",
-        },
-        "evaluated_epoch": receipt["epoch_ref"]["epoch_number"],
-        "validator_profile": EAL_PROFILE,
-    }
-
-
-def evaluate_compat(inputs: dict[str, Any]) -> dict[str, Any]:
-    contract_a = inputs["contract_a"]
-    contract_b = inputs["contract_b"]
-
-    a_actions = set(contract_a["action_space"])
-    b_actions = set(contract_b["action_space"])
-    actions_added = sorted(b_actions - a_actions)
-    actions_removed = sorted(a_actions - b_actions)
-
-    a_constraints = contract_a["constraints"]
-    b_constraints = contract_b["constraints"]
-    a_keys = set(a_constraints)
-    b_keys = set(b_constraints)
-    constraints_added = sorted(b_keys - a_keys)
-    constraints_removed = sorted(a_keys - b_keys)
-
-    constraints_tightened = []
-    constraints_loosened = []
-    for key in sorted(a_keys & b_keys):
-        aval = a_constraints[key]
-        bval = b_constraints[key]
-        if isinstance(aval, (int, float)) and isinstance(bval, (int, float)):
-            if bval < aval:
-                constraints_tightened.append(key)
-            elif bval > aval:
-                constraints_loosened.append(key)
-
-    a_risk = contract_a["risk_policy"]
-    b_risk = contract_b["risk_policy"]
-    risk_increased = []
-    risk_decreased = []
-    for key in sorted(set(a_risk) & set(b_risk)):
-        if b_risk[key] > a_risk[key]:
-            risk_increased.append(key)
-        elif b_risk[key] < a_risk[key]:
-            risk_decreased.append(key)
-
-    semantics_changed = bool(contract_b.get("semantics_changed", False))
-
-    reasons = []
-    if actions_removed:
-        reasons.append("COMPAT_ACTION_REMOVED")
-    if semantics_changed:
-        reasons.append("COMPAT_SEMANTICS_CHANGED")
-    if constraints_added:
-        reasons.append("COMPAT_CONSTRAINT_ADDED")
-    if constraints_tightened:
-        reasons.append("COMPAT_CONSTRAINT_TIGHTENED")
-    if risk_increased:
-        reasons.append("COMPAT_RISK_INCREASED")
-
-    if actions_removed or semantics_changed:
-        classification = "INCOMPATIBLE"
-        reasons = [
-            reason
-            for reason in reasons
-            if reason in ("COMPAT_ACTION_REMOVED", "COMPAT_SEMANTICS_CHANGED")
-        ]
-    elif constraints_added or constraints_tightened or risk_increased:
-        classification = "CONDITIONAL"
-        reasons = [
-            reason
-            for reason in reasons
-            if reason
-            in (
-                "COMPAT_CONSTRAINT_ADDED",
-                "COMPAT_CONSTRAINT_TIGHTENED",
-                "COMPAT_RISK_INCREASED",
-            )
-        ]
-    else:
-        classification = "BACKWARD_COMPATIBLE"
-        reasons = ["COMPAT_BACKWARD_ONLY_RELAX_OR_ADD"]
-
-    return {
-        "schema_version": "eal.compat.report.v1",
-        "classification": classification,
-        "primary_reason_code": reasons[0],
-        "reason_codes": reasons,
-        "contract_a_ref": {
-            "contract_id": contract_a["contract_id"],
-            "contract_hash": f"sha256:{contract_a['contract_sha256']}",
-        },
-        "contract_b_ref": {
-            "contract_id": contract_b["contract_id"],
-            "contract_hash": f"sha256:{contract_b['contract_sha256']}",
-        },
-        "diff_summary": {
-            "actions_added": actions_added,
-            "actions_removed": actions_removed,
-            "constraints_added": constraints_added,
-            "constraints_removed": constraints_removed,
-            "constraints_tightened": constraints_tightened,
-            "constraints_loosened": constraints_loosened,
-            "risk_increased": risk_increased,
-            "risk_decreased": risk_decreased,
-            "semantics_changed": semantics_changed,
-        },
-        "evaluator_profile": EAL_PROFILE,
-    }
-
-
 def evaluate_temporal(inputs: dict[str, Any]) -> dict[str, Any]:
     contract_a = inputs["contract_a"]
     contract_b = inputs["contract_b"]
@@ -264,7 +110,7 @@ def evaluate_temporal(inputs: dict[str, Any]) -> dict[str, Any]:
             "receipt_hash": f"sha256:{receipt['integrity']['receipt_c14n_sha256']}",
         },
         "evaluated_epoch": contract_b["epoch_number"],
-        "validator_profile": EAL_PROFILE,
+        "validator_profile": "eal-fixture-profile-v1",
     }
     if classification == "INVALIDATED":
         report["origin_epoch"] = contract_a["epoch_number"]
@@ -279,6 +125,15 @@ def verify_validation_fixtures(base: Path, validation_schema: dict[str, Any]) ->
     for fixture_path in fixture_paths:
         with fixture_path.open("r", encoding="utf-8") as fh:
             fixture = json.load(fh)
+
+        inputs = fixture["inputs"]
+        if "contract" in inputs and "receipt" in inputs:
+            derived_report = evaluate_validation(inputs["contract"], inputs["receipt"])
+            expected_report = fixture["expected_report"]
+            if derived_report != expected_report:
+                raise ValueError(
+                    f"{fixture_path.name}: derived validation report does not match expected_report"
+                )
 
         verify_report(
             fixture["expected_report"],
@@ -305,7 +160,7 @@ def verify_receipt_fixtures(
 
         validate(instance=fixture["inputs"]["receipt"], schema=receipt_schema)
 
-        derived_report = evaluate_receipt(fixture["inputs"])
+        derived_report = evaluate_validation(fixture["inputs"]["contract"], fixture["inputs"]["receipt"])
         expected_report = fixture["expected_report"]
         if derived_report != expected_report:
             raise ValueError(
@@ -338,10 +193,8 @@ def verify_temporal_fixtures(
         validate(instance=fixture["inputs"]["receipt"], schema=receipt_schema)
 
         compat_report = evaluate_compat(
-            {
-                "contract_a": fixture["inputs"]["contract_a"],
-                "contract_b": fixture["inputs"]["contract_b"],
-            }
+            fixture["inputs"]["contract_a"],
+            fixture["inputs"]["contract_b"],
         )
         if compat_report["classification"] == "BACKWARD_COMPATIBLE":
             raise ValueError(
@@ -375,7 +228,10 @@ def verify_compat_fixtures(base: Path, compat_schema: dict[str, Any]) -> None:
             fixture = json.load(fh)
 
         expected_report = fixture["expected_compat_report"]
-        derived_report = evaluate_compat(fixture["inputs"])
+        derived_report = evaluate_compat(
+            fixture["inputs"]["contract_a"],
+            fixture["inputs"]["contract_b"],
+        )
         if derived_report != expected_report:
             raise ValueError(
                 f"{fixture_path.name}: derived compat report does not match expected_compat_report"
@@ -389,6 +245,133 @@ def verify_compat_fixtures(base: Path, compat_schema: dict[str, Any]) -> None:
             fixture_path.name,
         )
         print(f"PASS {fixture_path.name}")
+
+
+def _run_cli(command: list[str], expected_exit_code: int, fixture_name: str) -> bytes:
+    run = subprocess.run(
+        command,
+        cwd=ROOT,
+        capture_output=True,
+        check=False,
+    )
+    if run.returncode != expected_exit_code:
+        stderr = run.stderr.decode("utf-8", errors="replace")
+        stdout = run.stdout.decode("utf-8", errors="replace")
+        raise ValueError(
+            f"{fixture_name}: CLI exit mismatch {run.returncode} != {expected_exit_code}\n"
+            f"STDERR:\n{stderr}\nSTDOUT:\n{stdout}"
+        )
+    return run.stdout
+
+
+def verify_cli_receipt_fixtures(base: Path) -> None:
+    fixture_paths = sorted(Path(p) for p in glob.glob(str(base / "fixtures_receipt" / "*.json")))
+    if not fixture_paths:
+        raise ValueError("no receipt fixtures found for CLI parity")
+
+    for fixture_path in fixture_paths:
+        with fixture_path.open("r", encoding="utf-8") as fh:
+            fixture = json.load(fh)
+
+        expected = fixture["expected_report"]
+        expected_exit_code = VALIDATION_EXIT_CODES[expected["classification"]]
+        expected_serialized = canonical_json_bytes(expected)
+
+        with tempfile.TemporaryDirectory(prefix="eal-cli-") as tmpdir:
+            tmp = Path(tmpdir)
+            contract_path = tmp / "contract.json"
+            receipt_path = tmp / "receipt.json"
+            out_path = tmp / "report.json"
+
+            contract_path.write_text(json.dumps(fixture["inputs"]["contract"]), encoding="utf-8")
+            receipt_path.write_text(json.dumps(fixture["inputs"]["receipt"]), encoding="utf-8")
+
+            stdout_bytes = _run_cli(
+                [
+                    str(ROOT / "eal"),
+                    "verify-receipt",
+                    "--contract",
+                    str(contract_path),
+                    "--receipt",
+                    str(receipt_path),
+                    "--schema-check",
+                    "--out",
+                    str(out_path),
+                ],
+                expected_exit_code,
+                fixture_path.name,
+            )
+
+            if stdout_bytes != expected_serialized:
+                raise ValueError(f"{fixture_path.name}: CLI stdout canonical JSON mismatch")
+
+            parsed_stdout = json.loads(stdout_bytes.decode("utf-8"))
+            if parsed_stdout != expected:
+                raise ValueError(f"{fixture_path.name}: CLI stdout parsed report mismatch")
+
+            out_bytes = out_path.read_bytes()
+            if out_bytes != expected_serialized:
+                raise ValueError(f"{fixture_path.name}: CLI --out payload mismatch")
+
+        print(f"PASS {fixture_path.name} (cli)")
+
+
+def verify_cli_compat_fixtures(base: Path) -> None:
+    fixture_paths = sorted(Path(p) for p in glob.glob(str(base / "fixtures_compat" / "*.json")))
+    if not fixture_paths:
+        raise ValueError("no compat fixtures found for CLI parity")
+
+    for fixture_path in fixture_paths:
+        with fixture_path.open("r", encoding="utf-8") as fh:
+            fixture = json.load(fh)
+
+        expected = fixture["expected_compat_report"]
+        expected_exit_code = COMPAT_EXIT_CODES[expected["classification"]]
+        expected_serialized = canonical_json_bytes(expected)
+
+        with tempfile.TemporaryDirectory(prefix="eal-cli-") as tmpdir:
+            tmp = Path(tmpdir)
+            contract_a_path = tmp / "contract_a.json"
+            contract_b_path = tmp / "contract_b.json"
+            out_path = tmp / "report.json"
+
+            contract_a_path.write_text(
+                json.dumps(fixture["inputs"]["contract_a"]),
+                encoding="utf-8",
+            )
+            contract_b_path.write_text(
+                json.dumps(fixture["inputs"]["contract_b"]),
+                encoding="utf-8",
+            )
+
+            stdout_bytes = _run_cli(
+                [
+                    str(ROOT / "eal"),
+                    "compat",
+                    "--contract-a",
+                    str(contract_a_path),
+                    "--contract-b",
+                    str(contract_b_path),
+                    "--schema-check",
+                    "--out",
+                    str(out_path),
+                ],
+                expected_exit_code,
+                fixture_path.name,
+            )
+
+            if stdout_bytes != expected_serialized:
+                raise ValueError(f"{fixture_path.name}: CLI stdout canonical JSON mismatch")
+
+            parsed_stdout = json.loads(stdout_bytes.decode("utf-8"))
+            if parsed_stdout != expected:
+                raise ValueError(f"{fixture_path.name}: CLI stdout parsed report mismatch")
+
+            out_bytes = out_path.read_bytes()
+            if out_bytes != expected_serialized:
+                raise ValueError(f"{fixture_path.name}: CLI --out payload mismatch")
+
+        print(f"PASS {fixture_path.name} (cli)")
 
 
 def main() -> int:
@@ -405,6 +388,8 @@ def main() -> int:
     verify_receipt_fixtures(base, validation_schema, receipt_schema)
     verify_temporal_fixtures(base, validation_schema, receipt_schema)
     verify_compat_fixtures(base, compat_schema)
+    verify_cli_receipt_fixtures(base)
+    verify_cli_compat_fixtures(base)
     return 0
 
 

@@ -2,6 +2,23 @@
 
 All notable changes to this repository are documented here.
 
+## 2026-02-28
+
+### Added
+
+- Deterministic CLI implementation:
+  - `./eal verify-receipt --contract ... --receipt ...`
+  - `./eal compat --contract-a ... --contract-b ...`
+- Shared core evaluator module:
+  - `aaa_eal/core.py`
+  - `aaa_eal/cli.py`
+  - `aaa_eal/__main__.py`
+
+### Changed
+
+- `conformance/verify_conformance.py` now validates CLI parity against fixture
+  expected reports and expected exit codes.
+
 ## 2026-02-27
 
 ### Added
