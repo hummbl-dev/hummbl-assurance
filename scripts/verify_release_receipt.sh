@@ -107,6 +107,7 @@ required_assets=(
   "verify_run1.txt"
   "verify_run2.txt"
   "verify_diff.txt"
+  "vendor_surface_evidence.json"
   "SHA256SUMS.txt"
   "release_receipt.json"
 )

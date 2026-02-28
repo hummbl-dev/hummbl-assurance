@@ -21,6 +21,9 @@ jobs:
       - name: Run verifier (pass 2)
         run: |
           python3 conformance/verify_conformance.py | tee artifacts/verify_run2.txt
+      - name: Collect vendor surface evidence
+        run: |
+          python3 conformance/collect_vendor_surface_evidence.py --out artifacts/vendor_surface_evidence.json
       - name: Verify experimental feature gate
         run: |
           python3 conformance/verify_vendor_feature_gates.py

@@ -63,6 +63,10 @@ All notable changes to this repository are documented here.
   - enforce `required_vendor_surfaces` coverage
   - enforce deterministic `feature_inventory` coherence for flags and candidate slugs
   - enforce evaluated-surface completeness (`audited_version`, inventory, candidate presence)
+- Conformance/release workflows now emit and publish vendor evidence artifacts:
+  - `.github/workflows/conformance.yml` writes `artifacts/vendor_surface_evidence.json`
+  - `.github/workflows/release-artifacts.yml` includes the artifact in release uploads and checksums
+  - `scripts/verify_release_receipt.sh` now requires `vendor_surface_evidence.json`
 
 ## 2026-02-27
 
