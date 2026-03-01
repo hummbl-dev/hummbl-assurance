@@ -1,0 +1,7 @@
+{
+  "action": "deploy",
+  "parameters": {"env": "prod"},
+  "intent_id": "abc-125",
+  "version": "1.0",
+  "governance_version": "v1.0"
+}

@@ -1,0 +1,8 @@
+{
+  "intent_id": "abc-124",
+  "version": "1.0",
+  "authority": "human",
+  "action": "deploy",
+  "parameters": {"b": 2, "a": 1},
+  "governance_version": "v1.0"
+}
