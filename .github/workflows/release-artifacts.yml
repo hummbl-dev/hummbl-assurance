@@ -19,28 +19,34 @@ jobs:
 
       - name: Install verifier dependency
         run: |
+          set -euo pipefail
           python -m pip install --upgrade pip
           python -m pip install jsonschema
 
       - name: Run verifier (pass 1)
         run: |
+          set -euo pipefail
           mkdir -p artifacts
           python3 conformance/verify_conformance.py | tee artifacts/verify_run1.txt
 
       - name: Run verifier (pass 2)
         run: |
+          set -euo pipefail
           python3 conformance/verify_conformance.py | tee artifacts/verify_run2.txt
 
       - name: Collect vendor surface evidence
         run: |
+          set -euo pipefail
           python3 conformance/collect_vendor_surface_evidence.py --out artifacts/vendor_surface_evidence.json
 
       - name: Verify experimental feature gate
         run: |
+          set -euo pipefail
           python3 conformance/verify_vendor_feature_gates.py
 
       - name: Compare verifier outputs for drift
         run: |
+          set -euo pipefail
           diff -u artifacts/verify_run1.txt artifacts/verify_run2.txt > artifacts/verify_diff.txt || true
           if [ -s artifacts/verify_diff.txt ]; then
             echo "Verifier output drift detected; see artifacts/verify_diff.txt" >&2
@@ -50,6 +56,7 @@ jobs:
 
       - name: Generate checksums
         run: |
+          set -euo pipefail
           sha256sum artifacts/verify_run1.txt > artifacts/SHA256SUMS.txt
           sha256sum artifacts/verify_run2.txt >> artifacts/SHA256SUMS.txt
           sha256sum artifacts/verify_diff.txt >> artifacts/SHA256SUMS.txt
@@ -59,6 +66,7 @@ jobs:
         env:
           GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         run: |
+          set -euo pipefail
           tag="${GITHUB_REF_NAME}"
           if ! gh release view "$tag" >/dev/null 2>&1; then
             gh release create "$tag" --title "$tag" --notes "Automated conformance artifacts for ${tag}."
@@ -68,6 +76,7 @@ jobs:
         env:
           GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         run: |
+          set -euo pipefail
           tag="${GITHUB_REF_NAME}"
           gh release upload "$tag" \
             artifacts/verify_run1.txt \
@@ -82,6 +91,7 @@ jobs:
         env:
           GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         run: |
+          set -euo pipefail
           tag="${GITHUB_REF_NAME}"
           timeout="${RELEASE_RECEIPT_TIMEOUT_SECONDS:-600}"
           poll="${RELEASE_RECEIPT_POLL_SECONDS:-5}"
@@ -134,7 +144,12 @@ jobs:
       - name: Generate release receipt manifest
         env:
           GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          CONFORMANCE_RUN_ID: ${{ steps.conformance_meta.outputs.run_id }}
+          CONFORMANCE_RUN_URL: ${{ steps.conformance_meta.outputs.run_url }}
+          RELEASE_RUN_ID: ${{ github.run_id }}
+          RELEASE_RUN_URL: ${{ github.server_url }}/${{ github.repository }}/actions/runs/${{ github.run_id }}
         run: |
+          set -euo pipefail
           tag="${GITHUB_REF_NAME}"
           release_json="$(gh release view "$tag" --repo "$GITHUB_REPOSITORY" --json url,assets)"
           release_url="$(jq -r '.url' <<<"$release_json")"
@@ -145,10 +160,10 @@ jobs:
             --arg repository "$GITHUB_REPOSITORY" \
             --arg commit_sha "$GITHUB_SHA" \
             --arg release_url "$release_url" \
-            --argjson conformance_run_id "${{ steps.conformance_meta.outputs.run_id }}" \
-            --arg conformance_run_url "${{ steps.conformance_meta.outputs.run_url }}" \
-            --argjson release_artifacts_run_id "${{ github.run_id }}" \
-            --arg release_artifacts_run_url "${{ github.server_url }}/${{ github.repository }}/actions/runs/${{ github.run_id }}" \
+            --argjson conformance_run_id "${CONFORMANCE_RUN_ID}" \
+            --arg conformance_run_url "${CONFORMANCE_RUN_URL}" \
+            --argjson release_artifacts_run_id "${RELEASE_RUN_ID}" \
+            --arg release_artifacts_run_url "${RELEASE_RUN_URL}" \
             --argjson assets "$assets_json" \
             '{
               schema_version: "eal.release.receipt.v1",
@@ -177,6 +192,7 @@ jobs:
 
       - name: Validate release receipt schema
         run: |
+          set -euo pipefail
           python3 - <<'PY'
           import json
           from jsonschema import validate
@@ -193,6 +209,7 @@ jobs:
         env:
           GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         run: |
+          set -euo pipefail
           tag="${GITHUB_REF_NAME}"
           gh release upload "$tag" artifacts/release_receipt.json --clobber
 

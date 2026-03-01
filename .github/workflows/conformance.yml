@@ -16,19 +16,24 @@ jobs:
       - run: python -m pip install jsonschema
       - name: Run verifier (pass 1)
         run: |
+          set -euo pipefail
           mkdir -p artifacts
           python3 conformance/verify_conformance.py | tee artifacts/verify_run1.txt
       - name: Run verifier (pass 2)
         run: |
+          set -euo pipefail
           python3 conformance/verify_conformance.py | tee artifacts/verify_run2.txt
       - name: Collect vendor surface evidence
         run: |
+          set -euo pipefail
           python3 conformance/collect_vendor_surface_evidence.py --out artifacts/vendor_surface_evidence.json
       - name: Verify experimental feature gate
         run: |
+          set -euo pipefail
           python3 conformance/verify_vendor_feature_gates.py
       - name: Compare outputs for determinism
         run: |
+          set -euo pipefail
           diff -u artifacts/verify_run1.txt artifacts/verify_run2.txt > artifacts/verify_diff.txt || true
           test ! -s artifacts/verify_diff.txt
       - name: Upload verifier artifacts
