@@ -49,11 +49,11 @@ Current execution lanes:
 
 ### P0 -- Immediate
 
-1. **Vendor evidence collection (3 pending)**
-   - Google Gemini CLI (v0.29.7): `vendor-scan` captured `experimental-acp`; pilot evidence still pending
-   - OpenRouter API: `vendor-scan` confirms surface availability; curated capability inventory still empty
+1. **Vendor evidence closure (Gemini/OpenRouter/Ollama)**
+   - Google Gemini CLI (v0.29.7): scan + inventory receipt captured; pilot scorecard still pending
+   - OpenRouter API: scan + inventory receipt captured; curated capability inventory still empty
    - Ollama Local (v0.15.4): empty inventory, daemon_unreachable on this machine
-   - Action: convert scan output into curated, scorecard-ready receipts and matrix entries
+   - Action: convert inventory receipts into scorecard-ready evaluation artifacts and matrix decisions
    - Note: Ollama blocked until Mac Mini (HUM-9) is provisioned
 
 ### P1 -- This Week
@@ -105,8 +105,8 @@ Current execution lanes:
 |--------|---------|--------|----------|----------|
 | Anthropic | claude_code_cli | EVALUATED | 4 assessed | 8 receipts |
 | OpenAI | codex_cli | EVALUATED | 6 assessed | mixed (2 confounded) |
-| Google | gemini_cli | PENDING_EVIDENCE | 1 in inventory | -- |
-| OpenRouter | openrouter_api | PENDING_EVIDENCE | 0 | -- |
+| Google | gemini_cli | PENDING_EVIDENCE | 1 in inventory | `google_gemini_cli_inventory_2026-03-01.json` |
+| OpenRouter | openrouter_api | PENDING_EVIDENCE | 0 | `openrouter_openrouter_api_inventory_2026-03-01.json` |
 | Ollama | ollama_local | PENDING_EVIDENCE | 0 | daemon unreachable |
 
 **Vendors evaluated:** 2/5

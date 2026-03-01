@@ -99,6 +99,7 @@ Promoted to default-on:      0 / 4   (  0%)
 | `experimental-acp` | **SURFACE-SCANNED** | Probe captured in latest vendor scan; pilot evaluation still pending |
 
 Action: run pilot evaluation and generate scorecard receipts.
+Inventory evidence: [`conformance/vendor_receipts/google_gemini_cli_inventory_2026-03-01.json`](conformance/vendor_receipts/google_gemini_cli_inventory_2026-03-01.json)
 
 ---
 
@@ -109,6 +110,7 @@ Action: run pilot evaluation and generate scorecard receipts.
 | _(none curated yet)_ | **SURFACE-SCANNED** | API key present and probe succeeded; capability inventory requires curation receipts |
 
 Action: curate OpenRouter capability inventory and materialize receipts.
+Inventory evidence: [`conformance/vendor_receipts/openrouter_openrouter_api_inventory_2026-03-01.json`](conformance/vendor_receipts/openrouter_openrouter_api_inventory_2026-03-01.json)
 
 ---
 
@@ -211,6 +213,8 @@ Action: curate OpenRouter capability inventory and materialize receipts.
 
 ### Cross-vendor probe layer
 - Latest surface scan: [`conformance/vendor_surface_evidence.latest.json`](conformance/vendor_surface_evidence.latest.json)
+- Gemini inventory receipt: [`conformance/vendor_receipts/google_gemini_cli_inventory_2026-03-01.json`](conformance/vendor_receipts/google_gemini_cli_inventory_2026-03-01.json)
+- OpenRouter inventory receipt: [`conformance/vendor_receipts/openrouter_openrouter_api_inventory_2026-03-01.json`](conformance/vendor_receipts/openrouter_openrouter_api_inventory_2026-03-01.json)
 
 ### OpenAI Codex
 - Gate config: [`conformance/experimental_feature_gate.json`](conformance/experimental_feature_gate.json)
