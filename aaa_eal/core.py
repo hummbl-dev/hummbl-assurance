@@ -515,8 +515,7 @@ def evaluate_temporal_validation(
             "evaluated_epoch": n_target.epoch_number if n_target.epoch_number is not None else 0,
             "validator_profile": validator_profile,
         }
-        if n_receipt.epoch_number is not None:
-            report["origin_epoch"] = n_receipt.epoch_number
+        report["origin_epoch"] = n_receipt.epoch_number if n_receipt.epoch_number is not None else 0
         return report
 
     return {
