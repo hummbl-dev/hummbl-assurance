@@ -68,6 +68,16 @@ jobs:
           set -euo pipefail
           python3 spec/verify_kernel_imports.py
 
+      - name: Verify SPEC.md failure code completeness
+        run: |
+          set -euo pipefail
+          count=$(grep -c '^- `E_' SPEC.md || true)
+          if [ "$count" -lt 13 ]; then
+            echo "FAIL: SPEC.md lists only $count failure codes (expected >= 13)"
+            exit 1
+          fi
+          echo "PASS: SPEC.md lists $count failure codes"
+
       - name: Verify precedence consistency
         run: |
           set -euo pipefail
