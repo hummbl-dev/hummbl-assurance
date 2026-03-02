@@ -1,0 +1,65 @@
+{
+  "test_id": "T16_INVALID_LOG_CHAIN_BREAK",
+  "description": "Log hash-chain integrity failure yields INVALID with E_LOG_CHAIN_BREAK",
+  "inputs": {
+    "contract": {
+      "contract_id": "contract-e1-v1",
+      "contract_hash": "sha256:contract-e1-v1",
+      "epoch": 1,
+      "action_space": [
+        "ACT_READ_STATUS"
+      ],
+      "boundary_rules": {
+        "ACT_READ_STATUS": {
+          "allow": true,
+          "required_params": []
+        }
+      }
+    },
+    "receipt": {
+      "receipt_id": "receipt-t16-chain-break",
+      "contract_id": "contract-e1-v1",
+      "contract_hash": "sha256:contract-e1-v1",
+      "timestamp_utc": "2026-02-27T00:16:00Z",
+      "signature": {
+        "key_id": "test-key-1",
+        "algorithm": "ed25519",
+        "status": "valid"
+      },
+      "actions": [
+        {
+          "action_id": "ACT_READ_STATUS",
+          "params": {},
+          "boundary_decision": "ALLOW"
+        }
+      ],
+      "evidence": [
+        {
+          "name": "trace.json",
+          "sha256": "sha256:evidence-t16"
+        }
+      ],
+      "receipt_hash": "sha256:receipt-t16-chain-break",
+      "log_chain_break": true
+    }
+  },
+  "expected_report": {
+    "schema_version": "eal.validation.report.v1",
+    "classification": "INVALID",
+    "primary_reason_code": "E_LOG_CHAIN_BREAK",
+    "reason_codes": [
+      "E_LOG_CHAIN_BREAK"
+    ],
+    "contract_ref": {
+      "contract_id": "contract-e1-v1",
+      "contract_hash": "sha256:contract-e1-v1"
+    },
+    "receipt_ref": {
+      "receipt_id": "receipt-t16-chain-break",
+      "receipt_hash": "sha256:receipt-t16-chain-break"
+    },
+    "evaluated_epoch": 1,
+    "validator_profile": "eal-fixture-profile-v1"
+  },
+  "expected_report_sha256": "ab32d28332b25ece21a44cf7681a093ead726fc485c15e4d3dd0d7da1fcd382c"
+}
