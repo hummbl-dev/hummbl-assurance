@@ -8,7 +8,7 @@
     "spec/canonicalization/canonicalization_rules_v1.md": "33eed54f497839cc8ede89b7296c266967ea4194078a74fd8fbf47e1c6ad6f55",
     "spec/canonicalization/canonicalization_id_v1.txt": "b4c44dca284df6ddfa5e174f3476522fa635405dcdd27de3b43fce82f9e19d95",
     "conformance/CANONICALIZATION.md": "637ae39a9a2f9b9612b114a45737ed70253dec71bf86db3fbebfb22bdee23caa",
-    "conformance/FAILURE_CODES.md": "f40af67526ff65a7012367040dabb1997755ea1bd9b051aa9053f8232b705c2e",
+    "conformance/FAILURE_CODES.md": "6c55e60653a0cd66eb9475d2cbf0109e3a38e3ec9074d7a10b56a322031a36d0",
     "conformance/receipt.schema.json": "ded636e044c4918b19926d1ddbfe2e9db3fa4e1af86576559a0a7a4f2b2a4ac6",
     "conformance/validation_report.schema.json": "daf66e0f40775a8c2a24c66ee8003c53914c62e031bbf814f24c5ee5fee8aec7",
     "conformance/compat_report.schema.json": "34a43112a4de8a322bbd6890c9b8dcdc02752a8b558703f1c75c416093c76dda"

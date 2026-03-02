@@ -181,6 +181,12 @@ def normalize_validation_contract(contract: dict[str, Any]) -> NormalizedValidat
     if not isinstance(boundary_rules, dict):
         raise ValueError("invalid boundary_rules")
 
+    for _action_id, _rule in boundary_rules.items():
+        if isinstance(_rule, dict):
+            _allow = _rule.get("allow")
+            if _allow is not None and not isinstance(_allow, bool):
+                raise ValueError("boundary_rules allow must be boolean")
+
     return NormalizedValidationContract(
         contract_id=contract_id,
         contract_hash=contract_hash,

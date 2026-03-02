@@ -69,43 +69,55 @@ The AAA repo is well-structured with strong deterministic conformance guarantees
 
 ---
 
-## P1 Findings (High) -- Recommended for next sprint
+## P1 Findings (High)
 
 ### P1-1. No `__version__` in `aaa_eal/__init__.py`
 Programmatic version queries not possible. Add `__version__ = "0.2.0"`.
+**Status:** RESOLVED -- `__version__ = "1.0.1"` added.
 
 ### P1-2. SPEC.md lists only 10 failure codes (13 in spec)
 `SPEC.md` v0.2.0 is stale -- missing `E_INPUT_MALFORMED`, `E_CONTRACT_VERSION_COLLISION`, `E_LOG_SEQUENCE_GAP`.
+**Status:** RESOLVED -- SPEC.md v0.3.0 lists all 13 codes in precedence order.
 
 ### P1-3. SPEC.md CLI commands don't match actual implementation
 CLI section shows `eal audit`, `eal check` -- actual commands are `verify-receipt`, `revalidate`, `compat`.
+**Status:** RESOLVED -- Section 13 updated with actual CLI syntax.
 
 ### P1-4. No mention of Pattern A determinism in SPEC.md
 The receipt determinism strategy (body/meta split) is a core invariant not documented in the public-facing spec.
+**Status:** RESOLVED -- Pattern A referenced in Section 11 with link to AAA_CONFORMANCE_PROFILE_v1.md §7.
 
 ### P1-5. `_boundary_mismatch` truthy coercion for ALLOW/DENY
 `bool(allow_raw)` coerces `0`, `""`, `[]` to `False`. Should validate `allow` is boolean or fail.
+**Status:** RESOLVED -- Boolean type validation added in `normalize_validation_contract()`. Non-boolean allow values now produce E_INPUT_MALFORMED. T18 fixture covers this edge case.
 
 ### P1-6. Missing `E_LOG_CHAIN_BREAK` and `E_REPLAY_DETECTED` fixtures
 These are covered by the `log_chain_break`/`replay_detected` receipt flags but have no dedicated test fixtures.
+**Status:** RESOLVED -- T16_INVALID_LOG_CHAIN_BREAK and T17_INVALID_REPLAY_DETECTED fixtures added. All 13 failure codes now have dedicated fixtures.
 
 ### P1-7. TVS manifest at `spec/fixtures/TVS_V1_MANIFEST.json` doesn't exist
 Referenced in AAA_TEST_VECTOR_SUITE_v1.md section 12 but never created.
+**Status:** RESOLVED (P0) -- file exists. Fixture mappings updated to include T11-T18.
 
 ### P1-8. `canonicalization_id` not emitted in receipt builder
 The receipt schema (section M8) requires `canonicalization_id` but `evaluate_validation()` doesn't include it.
+**Status:** DEFERRED -- Adding this field would change all 47 fixture hashes. Requires schema version bump to v1.1.
 
 ### P1-9. Temporal fixtures (T6-T10) number-collide with validation IDs
 The temporal fixtures use T6-T10, same range as might be expected for validation fixtures. New fixtures had to use T11-T15.
+**Status:** RESOLVED -- Fixture ID namespaces documented in FAILURE_CODES.md and SPEC.md §11: validation (T1-T5, T11+), temporal (T6-T10), receipt (R1+), compat (C1+).
 
 ### P1-10. `receipt.schema.json` `additionalProperties: false` blocks fixture evolution
 The strict schema prevents adding new fields to receipt fixtures without a schema update.
+**Status:** NOTED -- by design for Pattern A determinism. Schema evolution requires explicit version bump.
 
 ### P1-11. No automated SPEC.md staleness check
 SPEC.md can drift from the implementation with no CI gate catching it.
+**Status:** RESOLVED -- CI step added to `aaa-spec-suite.yml` verifying SPEC.md lists >= 13 failure codes.
 
 ### P1-12. Vendor feature gate verifier doesn't check for sanitized paths
 `verify_vendor_feature_gates.py` validates gate logic but doesn't flag local filesystem paths.
+**Status:** RESOLVED (P0) -- all paths sanitized in v1.0.1.
 
 ---
 

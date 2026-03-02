@@ -1,0 +1,64 @@
+{
+  "test_id": "T18_INVALID_BOUNDARY_ALLOW_TYPE",
+  "description": "Non-boolean allow value in boundary rules yields INDETERMINATE with E_INPUT_MALFORMED",
+  "inputs": {
+    "contract": {
+      "contract_id": "contract-e1-v1",
+      "contract_hash": "sha256:contract-e1-v1",
+      "epoch": 1,
+      "action_space": [
+        "ACT_READ_STATUS"
+      ],
+      "boundary_rules": {
+        "ACT_READ_STATUS": {
+          "allow": 1,
+          "required_params": []
+        }
+      }
+    },
+    "receipt": {
+      "receipt_id": "receipt-t18-allow-type",
+      "contract_id": "contract-e1-v1",
+      "contract_hash": "sha256:contract-e1-v1",
+      "timestamp_utc": "2026-02-27T00:18:00Z",
+      "signature": {
+        "key_id": "test-key-1",
+        "algorithm": "ed25519",
+        "status": "valid"
+      },
+      "actions": [
+        {
+          "action_id": "ACT_READ_STATUS",
+          "params": {},
+          "boundary_decision": "ALLOW"
+        }
+      ],
+      "evidence": [
+        {
+          "name": "trace.json",
+          "sha256": "sha256:evidence-t18"
+        }
+      ],
+      "receipt_hash": "sha256:receipt-t18-allow-type"
+    }
+  },
+  "expected_report": {
+    "schema_version": "eal.validation.report.v1",
+    "classification": "INDETERMINATE",
+    "primary_reason_code": "E_INPUT_MALFORMED",
+    "reason_codes": [
+      "E_INPUT_MALFORMED"
+    ],
+    "contract_ref": {
+      "contract_id": "unknown",
+      "contract_hash": "sha256:unknown"
+    },
+    "receipt_ref": {
+      "receipt_id": "unknown",
+      "receipt_hash": "sha256:unknown"
+    },
+    "evaluated_epoch": 0,
+    "validator_profile": "eal-fixture-profile-v1"
+  },
+  "expected_report_sha256": "026c407cd236e4a86511b3d70fa0d360fee1685256b40dea6dab879747936cee"
+}
