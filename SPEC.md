@@ -1,7 +1,7 @@
 # EAL-AAA Assurance Spec (Normative Draft)
 
-**Version:** 0.2.0  
-**Date:** 2026-02-27  
+**Version:** 0.3.0
+**Date:** 2026-03-02
 **Status:** Draft for implementation planning
 
 ## 1. Scope
@@ -95,18 +95,21 @@ If required fields are missing, classification must resolve to `INDETERMINATE` u
 - `INVALIDATED`
 - `INDETERMINATE`
 
-Each result must include deterministic reason codes. Minimum required codes:
+Each result must include deterministic reason codes. Required codes (13 total):
 
 - `E_OK_VALID`
+- `E_INPUT_MALFORMED`
+- `E_CONTRACT_VERSION_COLLISION`
 - `E_SIG_INVALID`
 - `E_HASH_MISMATCH`
 - `E_EVIDENCE_MISSING`
+- `E_EPOCH_AMBIGUOUS`
 - `E_ACTION_OUT_OF_SPACE`
 - `E_BOUNDARY_MISMATCH`
-- `E_EPOCH_AMBIGUOUS`
-- `E_EPOCH_INVALIDATED`
 - `E_LOG_CHAIN_BREAK`
+- `E_LOG_SEQUENCE_GAP`
 - `E_REPLAY_DETECTED`
+- `E_EPOCH_INVALIDATED`
 
 Normative taxonomy and precedence order are defined in:
 
@@ -140,17 +143,29 @@ Required golden fixtures:
 - `T4 INVALIDATED_EPOCH`: valid in `C_e`, invalid under `C_e+1`
 - `T5 INDETERMINATE_MISSING`: missing required evidence
 
+Extended validation fixtures (T11-T18) cover the remaining failure codes:
+
+- `T11 INPUT_MALFORMED`: unparseable input structure
+- `T12 BOUNDARY_MISMATCH`: boundary rule contradiction
+- `T13 ACTION_OUT_OF_SPACE`: action outside declared space (variant)
+- `T14 CONTRACT_VERSION_COLLISION`: same ID, different hash
+- `T15 LOG_SEQUENCE_GAP`: log sequence discontinuity
+- `T16 LOG_CHAIN_BREAK`: log hash-chain integrity failure
+- `T17 REPLAY_DETECTED`: duplicate receipt identifier
+- `T18 BOUNDARY_ALLOW_TYPE`: non-boolean allow value (type safety)
+
 Each fixture must assert deterministic class, deterministic reason codes, and deterministic canonical report hash.
 
-Reference implementation fixtures for this draft live in:
+Receipts follow **Pattern A** for determinism (see `AAA_CONFORMANCE_PROFILE_v1.md` section 7): `receipt_body` is deterministic and hashed; `receipt_meta` is non-deterministic and excluded from hashing.
 
-- `conformance/fixtures/`
+Fixture ID namespaces: validation (T1-T5, T11+), temporal (T6-T10), receipt (R1+), compat (C1+).
 
-Additional deterministic fixture sets for next-phase lock-in:
+Reference implementation fixtures live in:
 
-- `conformance/fixtures_receipt/` (`R1-R4`) for receipt schema and evidence sufficiency checks
-- `conformance/fixtures_temporal/` (`T6`) for explicit `INVALIDATED` epoch bridge behavior
-- `conformance/fixtures_compat/` (`C1-C7`) for `Compat(C_e, C_e+1)` classification checks
+- `conformance/fixtures/` -- validation fixtures (T1-T5, T11-T18)
+- `conformance/fixtures_receipt/` (`R1-R5`) for receipt schema and evidence sufficiency checks
+- `conformance/fixtures_temporal/` (`T6-T10`) for explicit temporal/epoch bridge behavior
+- `conformance/fixtures_compat/` (`C1-C9`) for `Compat(C_e, C_e+1)` classification checks
 
 ## 12. IP-Safe Publishability Contract
 
@@ -173,11 +188,9 @@ Private/non-publishable:
 
 CLI-first commands:
 
-- `eal verify <receipt>`
-- `eal diff <contract_a> <contract_b>`
-- `eal audit-log <log>`
-- `eal replay <receipt>`
-- `eal claim <receipt>`
+- `eal verify-receipt --contract <contract> --receipt <receipt>` -- validate receipt against contract
+- `eal revalidate --contract-origin <origin> --contract-target <target> --receipt <receipt>` -- temporal revalidation across epochs
+- `eal compat --contract-a <a> --contract-b <b>` -- compatibility classification between contract versions
 
 No UI and no cloud runtime are required for v1.
 
