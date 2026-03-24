@@ -1,6 +1,10 @@
-# AAA (Assured Agentic Architecture)
+# HUMMBL Assurance
 
-Validation-first assurance artifacts for autonomous execution under evolving governance.
+[![Python 3.11+](https://img.shields.io/badge/python-3.11%2B-blue.svg)](https://www.python.org/downloads/)
+[![License: Apache 2.0](https://img.shields.io/badge/license-Apache%202.0-green.svg)](LICENSE)
+[![Tests](https://img.shields.io/badge/tests-deterministic-brightgreen.svg)]()
+
+Governance assurance for AI agent systems — deterministic verification of execution receipts, contract compatibility, temporal revalidation, and machine-readable compliance claims. Companion to [hummbl-governance](https://github.com/hummbl-dev/hummbl-governance).
 
 This repository is intentionally scoped to the assurance layer:
 

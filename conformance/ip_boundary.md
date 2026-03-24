@@ -1,6 +1,6 @@
-# IP Boundary Matrix (Public AAA Repo)
+# IP Boundary Matrix (Public HUMMBL Assurance Repo)
 
-This matrix defines what can be published in `hummbl-dev/aaa`.
+This matrix defines what can be published in `hummbl-dev/hummbl-assurance`.
 
 | Artifact Type | Allowed | Redaction / Synthesis Rule | Rationale |
 |---|---|---|---|
