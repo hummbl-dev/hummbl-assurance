@@ -1,4 +1,4 @@
-# EAL-AAA Assurance Spec (Normative Draft)
+# HUMMBL Assurance Spec (Normative Draft)
 
 **Version:** 0.3.0
 **Date:** 2026-03-02
@@ -19,10 +19,10 @@ To prevent acronym drift, this document does not use `CAES` to mean action enume
 
 ## 3. Architecture Relationship
 
-`AAA` and `EAL` are complementary:
+HUMMBL Assurance comprises two complementary concerns:
 
-- `AAA` (Assured Agentic Architecture) is constructive: it executes intent under constraints and emits artifacts.
-- `EAL` (Execution Assurance Layer) is adjudicative: it validates artifacts independently and classifies compliance status across time.
+- The **constructive** layer executes intent under constraints and emits artifacts.
+- The **adjudicative** layer (EAL) validates artifacts independently and classifies compliance status across time.
 
 If execution and adjudication are controlled by a single mutable authority boundary, assurance loses independence.
 
