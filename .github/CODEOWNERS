@@ -1,0 +1,10 @@
+# Default repo ownership for HUMMBL Assurance
+* @hummbl-dev
+
+# Assurance-critical assets
+/conformance/ @hummbl-dev
+/SPEC.md @hummbl-dev
+/OPERATING_MODEL.md @hummbl-dev
+/RELEASE_POLICY.md @hummbl-dev
+/.github/ @hummbl-dev
+/SECURITY.md @hummbl-dev
